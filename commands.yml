@@ -1,0 +1,11 @@
+c:
+  Command: C:\Program Files\Microsoft VS Code\Code.exe
+  Arguments: '"{CurrentDirectory}"'
+
+stree:
+  Command: C:\Program Files (x86)\Atlassian\Sourcetree\SourceTree.exe
+  Arguments: '-f "{CurrentDirectory}"'
+
+startup:
+  Command: explorer.exe
+  Arguments: '{AppData}\Roaming\Microsoft\Windows\Start Menu\Programs\Startup'
