@@ -1,7 +1,13 @@
 # ExplorerShortcuts
 
+## Setup
+
+``` cmd
+gsudo pip install py2exe
+```
+
 ## Build
 
 ``` cmd
-py .\setup.py py2exe
+python .\setup.py py2exe
 ```
