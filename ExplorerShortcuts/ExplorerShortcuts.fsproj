@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\c\c.fsproj" />
     <ProjectReference Include="..\fork\fork.fsproj" />
+    <ProjectReference Include="..\repo\repo.fsproj" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

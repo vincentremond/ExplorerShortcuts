@@ -25,7 +25,7 @@ New-Item -Path $Name -ItemType Directory
 
 $ProgramContents = @"
 open System
-open System.Diagnostics
+open Common
 
 [<EntryPoint>]
 [<STAThread>]

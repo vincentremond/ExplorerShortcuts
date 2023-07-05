@@ -5,8 +5,8 @@ open Common
 [<STAThread>]
 let main _ =
     let vsCodePath = @"C:\Program Files\Microsoft VS Code\Code.exe"
-    let currentDirectory = Environment.CurrentDirectory
+    let (StartDirectory strStartDirectory) as startDirectory = StartDirectory.CurrentDirectory 
 
-    Process.start (StartDirectory currentDirectory) (Executable vsCodePath) [| currentDirectory |]
+    Process.startAndForget startDirectory (Executable vsCodePath) [| strStartDirectory |]
 
     0 // return an integer exit code

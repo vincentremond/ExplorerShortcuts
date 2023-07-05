@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "commands", "commands", "{B9
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Common", "Common\Common.fsproj", "{E70B65EC-5FCA-4455-9360-85E85745304B}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "repo", "repo\repo.fsproj", "{040A8301-B110-40C0-8B8B-6254121351B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,9 +56,14 @@ Global
 		{E70B65EC-5FCA-4455-9360-85E85745304B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E70B65EC-5FCA-4455-9360-85E85745304B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E70B65EC-5FCA-4455-9360-85E85745304B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{040A8301-B110-40C0-8B8B-6254121351B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{040A8301-B110-40C0-8B8B-6254121351B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{040A8301-B110-40C0-8B8B-6254121351B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{040A8301-B110-40C0-8B8B-6254121351B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DAB8CA0B-C9B1-421C-B83B-DAB5C4BA6E78} = {B9CFA8AE-D4D0-4499-91D8-29E662C0E85A}
 		{E7E3386F-99E0-4793-AC9E-3D5B63B8BC33} = {B9CFA8AE-D4D0-4499-91D8-29E662C0E85A}
+		{040A8301-B110-40C0-8B8B-6254121351B6} = {B9CFA8AE-D4D0-4499-91D8-29E662C0E85A}
 	EndGlobalSection
 EndGlobal
