@@ -6,10 +6,11 @@ open Common
 let main _ =
 
     let remoteUrl =
-        Process.getOutput
-            StartDirectory.CurrentDirectory
-            (Executable "git")
-            [| "config"; "--get"; "remote.origin.url" |]
+        Process.getOutput StartDirectory.CurrentDirectory (Executable "git") [|
+            "config"
+            "--get"
+            "remote.origin.url"
+        |]
         |> String.trim
 
     printfn $"Opening %s{remoteUrl}"
