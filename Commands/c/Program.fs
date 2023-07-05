@@ -1,5 +1,6 @@
 ﻿open System
 open Common
+open FSharpVRM
 
 [<EntryPoint>]
 [<STAThread>]
@@ -9,6 +10,8 @@ let main _ =
     let (StartDirectory strStartDirectory) as startDirectory =
         StartDirectory.CurrentDirectory
 
-    Process.startAndForget startDirectory (Executable vsCodePath) [| strStartDirectory |]
+    let arg = strStartDirectory |> String.replace "\"" "\\\"" |> sprintf "\"%s\""
+
+    Process.startAndForget startDirectory (Executable vsCodePath) [| arg |]
 
     0 // return an integer exit code

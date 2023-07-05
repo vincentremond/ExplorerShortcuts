@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\ExplorerShortcuts.Common\ExplorerShortcuts.Common.fsproj" />
+      <ProjectReference Include="..\..\FSharpVRM\FSharpVRM.fsproj" />
     </ItemGroup>
 
 </Project>
