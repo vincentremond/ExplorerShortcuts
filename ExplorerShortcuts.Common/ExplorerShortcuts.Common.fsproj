@@ -8,6 +8,8 @@
     <ItemGroup>
         <Compile Include="String.fs" />
         <Compile Include="Process.fs" />
+        <Compile Include="Path.fs" />
+        <Compile Include="Regex.fs" />
     </ItemGroup>
 
 </Project>
