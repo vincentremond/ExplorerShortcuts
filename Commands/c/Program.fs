@@ -5,7 +5,9 @@ open Common
 [<STAThread>]
 let main _ =
     let vsCodePath = @"C:\Program Files\Microsoft VS Code\Code.exe"
-    let (StartDirectory strStartDirectory) as startDirectory = StartDirectory.CurrentDirectory 
+
+    let (StartDirectory strStartDirectory) as startDirectory =
+        StartDirectory.CurrentDirectory
 
     Process.startAndForget startDirectory (Executable vsCodePath) [| strStartDirectory |]
 

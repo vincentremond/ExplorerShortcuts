@@ -11,9 +11,9 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\c\c.fsproj" />
-    <ProjectReference Include="..\fork\fork.fsproj" />
-    <ProjectReference Include="..\repo\repo.fsproj" />
+    <ProjectReference Include="..\Commands\c\c.fsproj" />
+    <ProjectReference Include="..\Commands\fork\fork.fsproj" />
+    <ProjectReference Include="..\Commands\repo\repo.fsproj" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
