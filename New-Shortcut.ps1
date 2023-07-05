@@ -3,10 +3,12 @@ param(
     [string]$Name
 )
 
-$FsProjPath = "$Name/$Name.fsproj"
-$ProgramPath = "$Name/Program.fs"
+$CommandsFolder = "Commands"
+$FsProjDir = "$CommandsFolder/$Name"
+$FsProjPath = "$FsProjDir/$Name.fsproj"
+$ProgramPath = "$FsProjDir//Program.fs"
 
-New-Item -Path $Name -ItemType Directory
+New-Item -Path $FsProjDir -ItemType Directory
 
 @"
 <Project Sdk="Microsoft.NET.Sdk">
@@ -36,7 +38,7 @@ let main _ =
     0 // return an integer exit code
 "@ | Out-File $ProgramPath
 
-dotnet sln add $FsProjPath --solution-folder commands
+dotnet sln add $FsProjPath --solution-folder $CommandsFolder
 
 dotnet add .\ExplorerShortcuts\ExplorerShortcuts.fsproj reference $FsProjPath
 dotnet add $FsProjPath reference .\Common\Common.fsproj
