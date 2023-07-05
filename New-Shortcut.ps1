@@ -45,4 +45,3 @@ let main _ =
 dotnet sln add $FsProjPath --solution-folder $CommandsFolder
 
 dotnet add .\ExplorerShortcuts\ExplorerShortcuts.fsproj reference $FsProjPath
-dotnet add $FsProjPath reference .\Common\Common.fsproj
