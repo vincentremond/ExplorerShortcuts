@@ -22,6 +22,10 @@ New-Item -Path $FsProjDir -ItemType Directory
         <Compile Include="Program.fs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\ExplorerShortcuts.Common\ExplorerShortcuts.Common.fsproj" />
+    </ItemGroup>
+
 </Project>
 "@ | Out-File $FsProjPath
 

@@ -1,6 +1,7 @@
 ﻿namespace Common
 
 open System.Diagnostics
+open System.Runtime.InteropServices
 
 type Executable = Executable of string
 
@@ -39,6 +40,7 @@ module Process =
 
         output
 
-    let openUrlInBrowser (url:string) =
-        Process.Start(url)
+    let openUrlInBrowser (url: string) =
+        ProcessStartInfo("cmd", $"/c start %s{url}", UseShellExecute = true, CreateNoWindow = true)
+        |> Process.Start
         |> ignore
