@@ -17,15 +17,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{609A26
 		New-Shortcut.ps1 = New-Shortcut.ps1
 	EndProjectSection
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "c", "c\c.fsproj", "{DAB8CA0B-C9B1-421C-B83B-DAB5C4BA6E78}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "c", "Commands\c\c.fsproj", "{DAB8CA0B-C9B1-421C-B83B-DAB5C4BA6E78}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fork", "fork\fork.fsproj", "{E7E3386F-99E0-4793-AC9E-3D5B63B8BC33}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fork", "Commands\fork\fork.fsproj", "{E7E3386F-99E0-4793-AC9E-3D5B63B8BC33}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "commands", "commands", "{B9CFA8AE-D4D0-4499-91D8-29E662C0E85A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commands", "Commands", "{B9CFA8AE-D4D0-4499-91D8-29E662C0E85A}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Common", "Common\Common.fsproj", "{E70B65EC-5FCA-4455-9360-85E85745304B}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "repo", "repo\repo.fsproj", "{040A8301-B110-40C0-8B8B-6254121351B6}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "repo", "Commands\repo\repo.fsproj", "{040A8301-B110-40C0-8B8B-6254121351B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
