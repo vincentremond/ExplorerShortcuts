@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ExplorerShortcuts", "ExplorerShortcuts\ExplorerShortcuts.fsproj", "{D8DFDBED-8D51-492D-9DA2-D4B0414F8091}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ExplorerShortcuts.Tests", "ExplorerShortcuts.Tests\ExplorerShortcuts.Tests.fsproj", "{A2F8A244-D09F-4321-A997-CC2DF7A11122}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{609A2674-0F00-4BD6-B4EB-C2014605CF1F}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -23,7 +21,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fork", "Commands\fork\fork.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commands", "Commands", "{B9CFA8AE-D4D0-4499-91D8-29E662C0E85A}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Common", "Common\Common.fsproj", "{E70B65EC-5FCA-4455-9360-85E85745304B}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ExplorerShortcuts.Common", "ExplorerShortcuts.Common\ExplorerShortcuts.Common.fsproj", "{E70B65EC-5FCA-4455-9360-85E85745304B}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "repo", "Commands\repo\repo.fsproj", "{040A8301-B110-40C0-8B8B-6254121351B6}"
 EndProject
@@ -40,10 +38,6 @@ Global
 		{D8DFDBED-8D51-492D-9DA2-D4B0414F8091}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8DFDBED-8D51-492D-9DA2-D4B0414F8091}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8DFDBED-8D51-492D-9DA2-D4B0414F8091}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A2F8A244-D09F-4321-A997-CC2DF7A11122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A2F8A244-D09F-4321-A997-CC2DF7A11122}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A2F8A244-D09F-4321-A997-CC2DF7A11122}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A2F8A244-D09F-4321-A997-CC2DF7A11122}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DAB8CA0B-C9B1-421C-B83B-DAB5C4BA6E78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DAB8CA0B-C9B1-421C-B83B-DAB5C4BA6E78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAB8CA0B-C9B1-421C-B83B-DAB5C4BA6E78}.Release|Any CPU.ActiveCfg = Release|Any CPU
