@@ -1,14 +1,18 @@
-﻿namespace Common
+﻿namespace ExplorerShortcuts.Common
 
 open System.Diagnostics
 open System.Runtime.InteropServices
 
-type Executable = Executable of string
+type Executable = | Executable of string
 
 type StartDirectory =
     | StartDirectory of string
 
     static member CurrentDirectory = StartDirectory System.Environment.CurrentDirectory
+
+    member this.Value =
+        match this with
+        | StartDirectory path -> path
 
 module Process =
     let startAndForget (StartDirectory workingDirectory) (Executable path) arguments =
@@ -34,7 +38,10 @@ module Process =
         let error = p.StandardError.ReadToEnd()
         p.WaitForExit()
 
-        if p.ExitCode <> 0 || String.isNotNullOrEmpty error then
+        if
+            p.ExitCode <> 0
+            || String.isNotNullOrEmpty error
+        then
             failwithf
                 $"Process exited with code %d{p.ExitCode}.\n----\nError:\n%s{error}.\n----\nOutput:\n%s{output}\n----\n"
 

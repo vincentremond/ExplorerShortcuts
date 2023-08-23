@@ -3,6 +3,10 @@ namespace ExplorerShortcuts.Common
 open System.Text.RegularExpressions
 
 [<RequireQualifiedAccess>]
-module File =
-    let writeAllLines (path: string) (lines: string seq) =
-        System.IO.File.WriteAllLines(path, lines)
+module Regex =
+    let replace (pattern: string) (replacement: string) (input: string) =
+        Regex.Replace(input, pattern, replacement)
+
+    let replaceAll (replacements: (string * string) seq) (input: string) =
+        replacements
+        |> Seq.fold (fun acc (pattern, replacement) -> replace pattern replacement acc) input

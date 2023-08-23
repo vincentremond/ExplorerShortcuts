@@ -1,6 +1,6 @@
 open System
 open System.IO
-open Common
+open ExplorerShortcuts.Common
 
 [<EntryPoint>]
 [<STAThread>]

@@ -1,5 +1,5 @@
 ﻿open System
-open Common
+open ExplorerShortcuts.Common
 open FSharpPlus
 
 [<EntryPoint>]
@@ -10,7 +10,10 @@ let main _ =
     let (StartDirectory strStartDirectory) as startDirectory =
         StartDirectory.CurrentDirectory
 
-    let arg = strStartDirectory |> String.replace "\"" "\\\"" |> sprintf "\"%s\""
+    let arg =
+        strStartDirectory
+        |> String.replace "\"" "\\\""
+        |> sprintf "\"%s\""
 
     Process.startAndForget startDirectory (Executable vsCodePath) [| arg |]
 

@@ -1,8 +1,7 @@
 open System
 open System.IO
-open Common
-open FSharpPlus
 open ExplorerShortcuts.Common
+open FSharpPlus
 
 let displayPrompt () =
     Console.Title <- " >>< TMP ><<"
@@ -27,18 +26,31 @@ let displayPrompt () =
 
     printf "                <name>: "
 
-
 let fixedName n =
-    n |> Regex.replace @"[^\w\d]" "-" |> Regex.replace "-+" "-"
+    n
+    |> Regex.replace @"[^\w\d]" "-"
+    |> Regex.replace "-+" "-"
 
 displayPrompt ()
 let name = Console.ReadLine()
 let today = DateTime.Now.ToString("yyyy-MM-dd")
 let folderName = $"{today}--{fixedName name}"
 let folder = @"D:\TMP\" </> folderName
-Directory.CreateDirectory(folder) |> ignore
+
+Directory.CreateDirectory(folder)
+|> ignore
+
 let notes = folder </> "notes.md"
-[ $"# {name}"; ""; $"_{today}_"; ""; ""; "" ] |> (File.writeAllLines notes)
+
+[
+    $"# {name}"
+    ""
+    $"_{today}_"
+    ""
+    ""
+    ""
+]
+|> (File.writeAllLines notes)
 
 Process.startAndForget (StartDirectory folder) (Executable "cmd.exe") [
     "/c"
