@@ -3,8 +3,10 @@ source https://api.nuget.org/v3/index.json
 storage: none
 framework: auto-detect
 nuget FSharp.Core
+nuget FSharp.Data.LiteralProviders
 nuget FSharpPlus
 nuget LibGit2Sharp
+nuget Spectre.Console
 
 group Tests
 

@@ -13,6 +13,8 @@
     <Compile Include="Path.fs" />
     <Compile Include="File.fs" />
     <Compile Include="Regex.fs" />
+    <Content Include="ANSI-Shadow.flf" />
+    <Compile Include="SpectreConsole.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
