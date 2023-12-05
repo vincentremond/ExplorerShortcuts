@@ -4,6 +4,17 @@ open System.IO
 open ExplorerShortcuts.Common
 open Spectre.Console
 
+let preferredLocations = [
+    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+    </> "TMP"
+    @"D:\TMP\"
+]
+
+let location =
+    preferredLocations
+    |> List.tryPick Directory.tryPath
+    |> Option.defaultWith (fun _ -> failwith $"Could not find preferred location %A{preferredLocations}")
+
 let displayPrompt () =
     Console.Title <- " ... TMP ... "
 
@@ -22,7 +33,10 @@ let fixedName n =
 let name = displayPrompt ()
 let today = DateTime.Now.ToString("yyyy-MM-dd")
 let folderName = $"{today}--{fixedName name}"
-let folder = @"D:\TMP\" </> folderName
+
+let folder =
+    location.FullName
+    </> folderName
 
 Directory.CreateDirectory(folder)
 |> ignore
@@ -46,3 +60,4 @@ startInfo.WorkingDirectory <- folder
 startInfo.WindowStyle <- ProcessWindowStyle.Hidden
 startInfo.UseShellExecute <- false
 let _process = Process.Start(startInfo)
+()
