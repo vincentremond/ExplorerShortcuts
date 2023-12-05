@@ -73,6 +73,7 @@ let startInfo =
 
 startInfo.WorkingDirectory <- folder
 startInfo.WindowStyle <- ProcessWindowStyle.Hidden
-startInfo.UseShellExecute <- false
+startInfo.UseShellExecute <- true
 let _process = Process.Start(startInfo)
+let _exited = _process.WaitForExit(TimeSpan.FromSeconds(5.)) 
 ()
