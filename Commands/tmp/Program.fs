@@ -25,14 +25,15 @@ let displayPrompt () =
 
     AnsiConsole.Ask<string>("What are you working on today?")
 
-let fixedName n =
+let fixName n =
     n
     |> Regex.replace @"[^\w\d]" "-"
     |> Regex.replace "-+" "-"
 
 let name = displayPrompt ()
 let today = DateTime.Now.ToString("yyyy-MM-dd")
-let folderName = $"{today}--{fixedName name}"
+let fixedName = fixName name
+let folderName = $"{today}--{fixedName}"
 
 let folder =
     location.FullName
@@ -53,8 +54,22 @@ let notes = folder </> "notes.md"
 ]
 |> (File.writeAllLines notes)
 
+let workspaceContents = """
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}
+"""
+    
+let workspaceFile = folder </> $"_{fixedName}..code-workspace"
+File.writeAllText workspaceFile workspaceContents 
+
 let startInfo =
-    ProcessStartInfo("cmd.exe", $"/c code.cmd \"{folder}\" --goto notes.md:5:0")
+    ProcessStartInfo("cmd.exe", $"/c code.cmd \"{workspaceFile}\" --goto notes.md:5:0")
 
 startInfo.WorkingDirectory <- folder
 startInfo.WindowStyle <- ProcessWindowStyle.Hidden
