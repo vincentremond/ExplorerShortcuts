@@ -1,9 +1,16 @@
 namespace ExplorerShortcuts.Common
 
+open System.IO
+
 [<RequireQualifiedAccess>]
 module File =
     let writeAllLines (path: string) (lines: string seq) =
-        System.IO.File.WriteAllLines(path, lines)
+        File.WriteAllLines(path, lines)
 
     let writeAllText (path: string) (contents: string) =
-        System.IO.File.WriteAllText(path, contents)
+        File.WriteAllText(path, contents)
+        
+    let hide (path: string) =
+        let currentAttributes = File.GetAttributes(path)
+        let newFileAttributes = FileAttributes.Hidden ||| currentAttributes
+        File.SetAttributes(path, newFileAttributes)

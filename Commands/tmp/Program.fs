@@ -55,18 +55,12 @@ let notes = folder </> "notes.md"
 |> (File.writeAllLines notes)
 
 let workspaceContents = """
-{
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {}
-}
+{ "folders": [ { "path": "." }  ], "settings": {} }
 """
     
-let workspaceFile = folder </> $"_{fixedName}..code-workspace"
-File.writeAllText workspaceFile workspaceContents 
+let workspaceFile = folder </> $"_{fixedName}_.code-workspace"
+File.writeAllText workspaceFile workspaceContents
+File.hide workspaceFile
 
 let startInfo =
     ProcessStartInfo("cmd.exe", $"/c code.cmd \"{workspaceFile}\" --goto notes.md:5:0")
