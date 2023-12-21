@@ -54,11 +54,15 @@ let notes = folder </> "notes.md"
 ]
 |> (File.writeAllLines notes)
 
-let workspaceContents = """
+let workspaceContents =
+    """
 { "folders": [ { "path": "." }  ], "settings": {} }
 """
-    
-let workspaceFile = folder </> $"_{fixedName}_.code-workspace"
+
+let workspaceFile =
+    folder
+    </> $"_{fixedName}_.code-workspace"
+
 File.writeAllText workspaceFile workspaceContents
 File.hide workspaceFile
 
@@ -69,5 +73,5 @@ startInfo.WorkingDirectory <- folder
 startInfo.WindowStyle <- ProcessWindowStyle.Hidden
 startInfo.UseShellExecute <- true
 let _process = Process.Start(startInfo)
-let _exited = _process.WaitForExit(TimeSpan.FromSeconds(5.)) 
+let _exited = _process.WaitForExit(TimeSpan.FromSeconds(5.))
 ()

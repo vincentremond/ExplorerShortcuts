@@ -2,6 +2,7 @@ source https://api.nuget.org/v3/index.json
 
 storage: none
 framework: auto-detect
+nuget FParsec
 nuget FSharp.Core
 nuget FSharp.Data.LiteralProviders
 nuget FSharpPlus

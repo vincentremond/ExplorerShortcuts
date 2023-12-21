@@ -15,6 +15,7 @@
     <ProjectReference Include="..\Commands\fork\fork.fsproj" />
     <ProjectReference Include="..\Commands\repo\repo.fsproj" />
     <ProjectReference Include="..\Commands\tmp\tmp.fsproj" />
+    <ProjectReference Include="..\Commands\rider\rider.fsproj" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

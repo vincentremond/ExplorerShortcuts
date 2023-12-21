@@ -2,6 +2,8 @@ STORAGE: NONE
 RESTRICTION: == net7.0
 NUGET
   remote: https://api.nuget.org/v3/index.json
+    FParsec (1.1.1)
+      FSharp.Core (>= 4.3.4)
     FSharp.Core (7.0.401)
     FSharp.Data.LiteralProviders (1.0.3)
       FSharp.Core (>= 4.5)

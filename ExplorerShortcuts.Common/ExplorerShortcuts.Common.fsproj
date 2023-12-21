@@ -8,12 +8,13 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
+    <Content Include="ANSI-Shadow.flf" />
     <Compile Include="String.fs" />
     <Compile Include="Process.fs" />
     <Compile Include="Path.fs" />
     <Compile Include="File.fs" />
+    <Compile Include="Directory.fs" />
     <Compile Include="Regex.fs" />
-    <Content Include="ANSI-Shadow.flf" />
     <Compile Include="SpectreConsole.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />

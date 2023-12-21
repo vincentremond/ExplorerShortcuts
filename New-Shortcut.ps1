@@ -31,7 +31,7 @@ New-Item -Path $FsProjDir -ItemType Directory
 
 $ProgramContents = @"
 open System
-open Common
+open ExplorerShortcuts.Common
 
 [<EntryPoint>]
 [<STAThread>]

@@ -10,7 +10,8 @@ let main _ =
     let possiblePaths =
         [
             @"C:\Program Files"
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> @"Programs"
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+            </> @"Programs"
         ]
         |> List.map (fun x ->
             x
