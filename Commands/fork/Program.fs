@@ -23,7 +23,7 @@ let main _args =
     printfn $"Fork path is %s{forkPath} (Exists: %b{forkPathInfo.Exists})"
     printf "Starting Fork..."
 
-    Process.startAndForget startDirectory (Executable forkPath) [| strStartDirectory |]
+    Process.startAndForget startDirectory (Executable forkPath) [| $@"""%s{strStartDirectory}""" |]
 
     printfn " done."
     0 // return an integer exit code
