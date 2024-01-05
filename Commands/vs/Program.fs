@@ -6,7 +6,7 @@ open Spectre.Console
 
 [<EntryPoint>]
 [<STAThread>]
-let main _ =
+let main _args =
 
     let possibleLocations =
         [

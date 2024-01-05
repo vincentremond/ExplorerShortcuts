@@ -46,19 +46,13 @@ let main _ =
     let installFolders =
         possibleLocations
         |> Seq.collect (Directory.getDirectories "JetBrains Rider *")
-        |> Seq.map (fun installPath ->
-            installPath
-            </> "bin"
-            </> "rider64.exe"
-        )
+        |> Seq.map (fun installPath -> installPath </> "bin" </> "rider64.exe")
         |> Seq.map (fun path -> (path, getProductVersion path))
         |> Seq.map (fun (path, version) -> (path, parseProductVersion version))
         |> Seq.sortByDescending snd
         |> Seq.toArray
 
-    let slnPath =
-        Environment.CurrentDirectory
-        |> Directory.getAllFiles "*.sln"
+    let slnPath = Environment.CurrentDirectory |> Directory.getAllFiles "*.sln"
 
     AnsiConsole.Write(FigletText(SpectreConsole.FigletFont.AnsiShadow, "JetBrains Rider"))
     AnsiConsole.WriteLine()
@@ -93,10 +87,7 @@ let main _ =
     AnsiConsole.WriteLine()
     AnsiConsole.WriteLine($"Opening solution file '{solutionFile}'")
 
-    let args =
-        [| solutionFile |]
-        |> Array.map (sprintf "\"%s\"")
-        |> String.concat " "
+    let args = [| solutionFile |] |> Array.map (sprintf "\"%s\"") |> String.concat " "
 
     let psi =
         ProcessStartInfo(path, args, UseShellExecute = true, CreateNoWindow = false)

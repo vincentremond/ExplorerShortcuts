@@ -6,9 +6,7 @@ open LibGit2Sharp
 [<STAThread>]
 let main _ =
 
-    let dir =
-        StartDirectory.CurrentDirectory.Value
-        |> Repository.Discover
+    let dir = StartDirectory.CurrentDirectory.Value |> Repository.Discover
 
     printfn $"Found git repository at %s{dir}"
 

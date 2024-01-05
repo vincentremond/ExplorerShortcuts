@@ -13,10 +13,7 @@ let main _ =
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
             </> @"Programs"
         ]
-        |> List.map (fun x ->
-            x
-            </> @"Microsoft VS Code\Code.exe"
-        )
+        |> List.map (fun x -> x </> @"Microsoft VS Code\Code.exe")
 
     let vsCodePath =
         possiblePaths
@@ -26,10 +23,7 @@ let main _ =
     let StartDirectory strStartDirectory as startDirectory =
         StartDirectory.CurrentDirectory
 
-    let arg =
-        strStartDirectory
-        |> String.replace "\"" "\\\""
-        |> sprintf "\"%s\""
+    let arg = strStartDirectory |> String.replace "\"" "\\\"" |> sprintf "\"%s\""
 
     Process.startAndForget startDirectory (Executable vsCodePath) [| arg |]
 

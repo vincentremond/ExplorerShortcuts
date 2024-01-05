@@ -22,5 +22,4 @@ module String =
     let trim (s: string) = s.Trim()
 
     let replaceAll (replacements: seq<string * string>) (s: string) : string =
-        replacements
-        |> Seq.fold (fun s -> s.Replace) s
+        replacements |> Seq.fold (fun s -> s.Replace) s

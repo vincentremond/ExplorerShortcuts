@@ -38,10 +38,7 @@ module Process =
         let error = p.StandardError.ReadToEnd()
         p.WaitForExit()
 
-        if
-            p.ExitCode <> 0
-            || String.isNotNullOrEmpty error
-        then
+        if p.ExitCode <> 0 || String.isNotNullOrEmpty error then
             failwithf
                 $"Process exited with code %d{p.ExitCode}.\n----\nError:\n%s{error}.\n----\nOutput:\n%s{output}\n----\n"
 

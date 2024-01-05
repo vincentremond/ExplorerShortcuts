@@ -12,4 +12,4 @@ module Path =
     let (<///>) a b =
         List.allPairs a b |> List.map (fun (a, b) -> (a </> b))
 
-    // let (<|/>) a b = a |> List.map (fun a -> a </> b)
+// let (<|/>) a b = a |> List.map (fun a -> a </> b)
