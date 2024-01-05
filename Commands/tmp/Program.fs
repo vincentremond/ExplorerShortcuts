@@ -4,11 +4,19 @@ open System.IO
 open ExplorerShortcuts.Common
 open Spectre.Console
 
-let preferredLocations = [
-    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
-    </> "TMP"
-    @"D:\TMP\"
-]
+let preferredLocations =
+    let userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+
+    seq {
+        yield (userProfile </> "TMP")
+        yield @"D:\TMP\"
+
+        yield!
+            (userProfile
+             |> Directory.getDirectories "OneDrive*"
+             |> Seq.map (fun onedrive -> onedrive </> "TMP"))
+    }
+    |> List.ofSeq
 
 let location =
     preferredLocations
@@ -26,21 +34,16 @@ let displayPrompt () =
     AnsiConsole.Ask<string>("What are you working on today?")
 
 let fixName n =
-    n
-    |> Regex.replace @"[^\w\d]" "-"
-    |> Regex.replace "-+" "-"
+    n |> Regex.replace @"[^\w\d]" "-" |> Regex.replace "-+" "-"
 
 let name = displayPrompt ()
 let today = DateTime.Now.ToString("yyyy-MM-dd")
 let fixedName = fixName name
 let folderName = $"{today}--{fixedName}"
 
-let folder =
-    location.FullName
-    </> folderName
+let folder = location.FullName </> folderName
 
-Directory.CreateDirectory(folder)
-|> ignore
+Directory.CreateDirectory(folder) |> ignore
 
 let notes = folder </> "notes.md"
 
@@ -59,9 +62,7 @@ let workspaceContents =
 { "folders": [ { "path": "." }  ], "settings": {} }
 """
 
-let workspaceFile =
-    folder
-    </> $"_{fixedName}_.code-workspace"
+let workspaceFile = folder </> $"_{fixedName}_.code-workspace"
 
 File.writeAllText workspaceFile workspaceContents
 File.hide workspaceFile
