@@ -14,3 +14,10 @@ module File =
         let newFileAttributes = FileAttributes.Hidden ||| currentAttributes
 
         File.SetAttributes(path, newFileAttributes)
+
+    let tryPath (path: string) =
+        let fileInfo = FileInfo(path)
+
+        match fileInfo.Exists with
+        | true -> Some fileInfo
+        | false -> None

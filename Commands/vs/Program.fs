@@ -25,9 +25,9 @@ let main _args =
         ]
         <//> @"Common7\IDE\devenv.exe"
 
-    let installFolders =
+    let exeLocations =
         possibleLocations
-        |> Seq.choose Directory.tryPath
+        |> Seq.choose File.tryPath
         |> Seq.map (_.FullName)
         |> Seq.sort
         |> Seq.toArray
@@ -38,7 +38,7 @@ let main _args =
     AnsiConsole.WriteLine()
 
     let path =
-        match installFolders with
+        match exeLocations with
         | [||] -> failwithf $"No Visual Studio installation found in\n%A{possibleLocations}"
         | [| path |] -> path
         | _ ->
@@ -46,7 +46,7 @@ let main _args =
                 SelectionPrompt<string>()
                 |> SelectionPrompt.setTitle "Version ?"
                 |> SelectionPrompt.pageSize 10
-                |> SelectionPrompt.addChoices installFolders
+                |> SelectionPrompt.addChoices exeLocations
             )
 
     AnsiConsole.WriteLine()
