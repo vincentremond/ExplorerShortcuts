@@ -2,6 +2,7 @@ open System
 open System.Diagnostics
 open System.IO
 open ExplorerShortcuts.Common
+open Newtonsoft.Json
 open Spectre.Console
 
 let preferredLocations =
@@ -58,9 +59,11 @@ let notes = folder </> "notes.md"
 |> (File.writeAllLines notes)
 
 let workspaceContents =
-    """
-{ "folders": [ { "path": "." }  ], "settings": {} }
-"""
+    {|
+        folders = [ {| path = "." |} ]
+        settings = {| ``window.title`` = name |}
+    |}
+    |> (fun x -> JsonConvert.SerializeObject(x, Formatting.Indented))
 
 let workspaceFile = folder </> $"_{fixedName}_.code-workspace"
 

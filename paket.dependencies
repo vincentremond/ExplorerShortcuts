@@ -7,6 +7,7 @@ nuget FSharp.Core
 nuget FSharp.Data.LiteralProviders
 nuget FSharpPlus
 nuget LibGit2Sharp
+nuget Newtonsoft.Json
 nuget Spectre.Console
 
 group Tests

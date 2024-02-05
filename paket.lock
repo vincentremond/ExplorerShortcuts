@@ -12,6 +12,7 @@ NUGET
     LibGit2Sharp (0.29)
       LibGit2Sharp.NativeBinaries (2.0.321)
     LibGit2Sharp.NativeBinaries (2.0.321)
+    Newtonsoft.Json (13.0.3)
     Spectre.Console (0.48)
       System.Memory (>= 4.5.5)
     System.Memory (4.5.5)
