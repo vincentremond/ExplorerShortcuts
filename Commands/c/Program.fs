@@ -23,7 +23,16 @@ let main _ =
     let StartDirectory strStartDirectory as startDirectory =
         StartDirectory.CurrentDirectory
 
-    let arg = strStartDirectory |> String.replace "\"" "\\\"" |> sprintf "\"%s\""
+    let codeWorkspaceFile =
+        Directory.GetFiles(strStartDirectory, "*.code-workspace")
+        |> Array.tryExactlyOne
+        
+    let toStart =
+        match codeWorkspaceFile with
+        | Some file -> file
+        | None -> strStartDirectory
+
+    let arg = toStart |> String.replace "\"" "\\\"" |> sprintf "\"%s\""
 
     Process.startAndForget startDirectory (Executable vsCodePath) [| arg |]
 
