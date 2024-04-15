@@ -51,9 +51,9 @@ let notes = folder </> "notes.md"
 [
     $"# {name}"
     ""
-    $"_{today}_"
+    $"Date: _{today}_"
     ""
-    ""
+    "**your notes here**"
     ""
 ]
 |> (File.writeAllLines notes)
