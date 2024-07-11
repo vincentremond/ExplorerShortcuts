@@ -24,9 +24,8 @@ let main _ =
         StartDirectory.CurrentDirectory
 
     let codeWorkspaceFile =
-        Directory.GetFiles(strStartDirectory, "*.code-workspace")
-        |> Array.tryExactlyOne
-        
+        Directory.GetFiles(strStartDirectory, "*.code-workspace") |> Array.tryExactlyOne
+
     let toStart =
         match codeWorkspaceFile with
         | Some file -> file

@@ -6,7 +6,8 @@ param(
 $CommandsFolder = "Commands"
 $FsProjDir = "$CommandsFolder/$Name"
 $FsProjPath = "$FsProjDir/$Name.fsproj"
-$ProgramPath = "$FsProjDir//Program.fs"
+$ProgramPath = "$FsProjDir/Program.fs"
+$PaketReferencesPath = "$FsProjDir/paket.references"
 
 New-Item -Path $FsProjDir -ItemType Directory
 
@@ -19,6 +20,7 @@ New-Item -Path $FsProjDir -ItemType Directory
     </PropertyGroup>
 
     <ItemGroup>
+        <None Include="paket.references" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
@@ -28,6 +30,8 @@ New-Item -Path $FsProjDir -ItemType Directory
 
 </Project>
 "@ | Out-File $FsProjPath
+
+"FS.Core" | Out-File $PaketReferencesPath
 
 $ProgramContents = @"
 open System
