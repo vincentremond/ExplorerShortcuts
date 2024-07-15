@@ -42,10 +42,16 @@ let main _ =
             Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
         ]
         |> Seq.map (fun path -> path </> "JetBrains")
+        |> Seq.collect (Directory.getDirectories "JetBrains Rider *")
+        |> List.ofSeq
+
+    let possibleLocations =
+        (Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+         </> @"AppData\Local\Programs\Rider")
+        :: possibleLocations
 
     let installFolders =
         possibleLocations
-        |> Seq.collect (Directory.getDirectories "JetBrains Rider *")
         |> Seq.map (fun installPath -> installPath </> "bin" </> "rider64.exe")
         |> Seq.map (fun path -> (path, getProductVersion path))
         |> Seq.map (fun (path, version) -> (path, parseProductVersion version))
