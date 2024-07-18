@@ -24,8 +24,12 @@ module VersionParser =
         | Failure(msg, _, _) -> Result.Error msg)
 
 [<EntryPoint>]
-[<STAThread>]
-let main _ =
+let main args =
+
+    let verbose =
+        match args with
+        | [| _; "--verbose" |] -> true
+        | _ -> false
 
     let getProductVersion (path: string) =
         let versionInfo = FileVersionInfo.GetVersionInfo path
@@ -36,36 +40,51 @@ let main _ =
         | Ok(major, minor, build) -> (major, minor, build)
         | Error _ -> failwithf $"Failed to parse version: %s{version}"
 
-    let possibleLocations =
-        [
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
-        ]
-        |> Seq.map (fun path -> path </> "JetBrains")
-        |> Seq.collect (Directory.getDirectories "JetBrains Rider *")
-        |> List.ofSeq
-
-    let possibleLocations =
+    let possibleLocations = [
+        (Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+         </> "JetBrains",
+         "JetBrains Rider *")
+        (Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
+         </> "JetBrains",
+         "JetBrains Rider *")
         (Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
-         </> @"AppData\Local\Programs\Rider")
-        :: possibleLocations
+         </> @"AppData\Local\Programs",
+         "Rider")
+    ]
 
     let installFolders =
         possibleLocations
-        |> Seq.map (fun installPath -> installPath </> "bin" </> "rider64.exe")
-        |> Seq.map (fun path -> (path, getProductVersion path))
-        |> Seq.map (fun (path, version) -> (path, parseProductVersion version))
-        |> Seq.sortByDescending snd
-        |> Seq.toArray
+        |> List.collect (fun (path, installDirectoryPattern) ->
+            match Directory.tryPath path with
+            | None -> []
+            | Some directory ->
+                directory.GetDirectories(installDirectoryPattern)
+                |> Seq.map (fun dir -> dir.FullName)
+                |> Seq.toList
+        )
+        |> List.map (fun installPath -> installPath </> "bin" </> "rider64.exe")
+        |> List.map (fun path -> (path, getProductVersion path))
+        |> List.map (fun (path, version) -> (path, parseProductVersion version))
+        |> List.sortByDescending snd
+        |> List.toArray
 
     let slnPath = Environment.CurrentDirectory |> Directory.getAllFiles "*.sln"
 
-    AnsiConsole.Write(FigletText(SpectreConsole.FigletFont.AnsiShadow, "JetBrains Rider"))
-    AnsiConsole.WriteLine()
+    let figletText =
+        FigletText(SpectreConsole.FigletFont.AnsiShadow, "JetBrains Rider").Centered()
+
+    figletText.Pad <- false
+    let panel = Panel(figletText).PadTop(1).PadBottom(0).PadLeft(1).PadRight(1)
+    panel.Expand <- false
+    panel.Width <- 110
+    AnsiConsole.Write(panel)
 
     let (path, (major, minor, build)) =
         match installFolders with
-        | [||] -> failwithf $"No JetBrains Rider installation found in %A{possibleLocations}"
+        | [||] ->
+            failwithf
+                "No JetBrains Rider installation found in %A"
+                (possibleLocations |> List.map (fun (a, b) -> $"{a}\\{b}"))
         | [| x |] -> x
         | _ ->
             AnsiConsole.Prompt(
@@ -75,8 +94,9 @@ let main _ =
                 |> SelectionPrompt.addChoices installFolders
             )
 
-    AnsiConsole.WriteLine()
-    AnsiConsole.WriteLine($"Using JetBrains Rider {major}.{minor}.{build} located : '{path}'")
+    AnsiConsole.MarkupLineInterpolated(
+        $"Using JetBrains Rider [blue]{major}.{minor}.{build}[/] located in : '[bold]{path}[/]'"
+    )
 
     let solutionFile =
         match slnPath with
@@ -90,13 +110,10 @@ let main _ =
                 |> SelectionPrompt.addChoices slnPath
             )
 
-    AnsiConsole.WriteLine()
-    AnsiConsole.WriteLine($"Opening solution file '{solutionFile}'")
-
-    let args = [| solutionFile |] |> Array.map (sprintf "\"%s\"") |> String.concat " "
+    AnsiConsole.MarkupLineInterpolated($"Opening solution file '[bold]{solutionFile}[/]'")
 
     let psi =
-        ProcessStartInfo(path, args, UseShellExecute = true, CreateNoWindow = false)
+        ProcessStartInfo(path, [| solutionFile |], UseShellExecute = true, CreateNoWindow = false)
 
     Process.Start(psi) |> ignore
 

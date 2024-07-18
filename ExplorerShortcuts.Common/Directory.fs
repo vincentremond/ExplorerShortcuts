@@ -15,3 +15,7 @@ module Directory =
         match directoryInfo.Exists with
         | true -> Some directoryInfo
         | false -> None
+
+[<RequireQualifiedAccess>]
+module DirectoryInfo =
+    let getDirectories filter (directoryInfo: DirectoryInfo) = directoryInfo.GetDirectories(filter)
