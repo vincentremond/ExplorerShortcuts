@@ -13,5 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\ExplorerShortcuts.Common\ExplorerShortcuts.Common.fsproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="logo.txt" />
+  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

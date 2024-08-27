@@ -102,14 +102,18 @@ let main args =
 
     let slnPath = Environment.CurrentDirectory |> Directory.getAllFiles "*.sln"
 
-    let figletText =
-        FigletText(SpectreConsole.FigletFont.AnsiShadow, "JetBrains Rider").Centered()
+    // let figletText =
+    //     FigletText(SpectreConsole.FigletFont.AnsiShadow, "JetBrains Rider").Centered()
 
-    figletText.Pad <- false
-    let panel = Panel(figletText).PadTop(1).PadBottom(0).PadLeft(1).PadRight(1)
-    panel.Expand <- false
-    panel.Width <- 110
-    AnsiConsole.Write(panel)
+    // figletText.Pad <- false
+    // let panel = Panel(figletText).PadTop(1).PadBottom(0).PadLeft(1).PadRight(1)
+    // panel.Expand <- false
+    // panel.Width <- 110
+    // AnsiConsole.Write(panel)
+
+    let logo = FSharp.Data.LiteralProviders.TextFile.``logo.txt``.Text
+
+    AnsiConsole.WriteLine(logo)
 
     let (path, (major, minor, build)) =
         match installFolders with
