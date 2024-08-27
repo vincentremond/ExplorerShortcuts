@@ -9,15 +9,47 @@ module VersionParser =
 
     open FParsec
 
+    let private (?<|>) left right = (attempt left) <|> right
+    let private (<|>?) left right = (left) <|> (attempt right)
+
+    let private publicMajor =
+        pint32
+        >>= (fun major ->
+            if major > 2020 && major < 2100 then
+                preturn major
+            else
+                fail "Major version out of range"
+        )
+
+    let private publicMinor = pint32
+    let private publicFix = pint32
+    let private major = pint32
+    let private minor = pint32
+    let private fix = pint32
+    let private build = pint32
+
+    let oldFormat =
+        ((publicMajor .>> skipChar '.')
+         >>. (publicMinor .>> skipChar '.')
+         >>. (publicFix .>> skipString ".RD-")
+         >>. (major .>> skipChar '.')
+         .>>. (minor .>> skipChar '.')
+         .>>. (fix .>> eof))
+        |>> fun ((major, minor), fix) -> (major, minor, fix, 0)
+
+    let newFormat =
+        (major .>> skipChar '.')
+        .>>. (minor .>> skipChar '.')
+        .>>. (fix .>> skipChar '.')
+        .>>. (build .>> skipString "-RD")
+        |>> fun (((major, minor), fix), build) -> (major, minor, fix, build)
+
     let parse =
         run (
-            ((pint32 .>> skipChar '.')
-             .>>. (pint32 .>> skipChar '.')
-             .>>. (pint32 .>> skipString ".RD-")
-             .>>. (pint32 .>> skipChar '.')
-             .>>. (pint32 .>> skipChar '.')
-             .>>. (pint32 .>> eof))
-            |>> fun (((((major1, minor1), fix), major2), minor2), build) -> (major2, minor2, build)
+            choice [
+                attempt oldFormat
+                newFormat
+            ]
         )
         >> (function
         | Success(result, _, _) -> Result.Ok result
@@ -37,7 +69,7 @@ let main args =
 
     let parseProductVersion (version: string) =
         match VersionParser.parse version with
-        | Ok(major, minor, build) -> (major, minor, build)
+        | Ok(major, minor, build, fix) -> (major, minor, build)
         | Error _ -> failwithf $"Failed to parse version: %s{version}"
 
     let possibleLocations = [

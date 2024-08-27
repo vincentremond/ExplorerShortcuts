@@ -3,6 +3,7 @@ open System.Diagnostics
 open System.IO
 open ExplorerShortcuts.Common
 open Newtonsoft.Json
+open Pinicola.FSharp.SpectreConsole
 open Spectre.Console
 
 let preferredLocations =
@@ -32,12 +33,17 @@ let displayPrompt () =
     AnsiConsole.Clear()
     AnsiConsole.Write(FigletText(SpectreConsole.FigletFont.AnsiShadow, "TMP"))
 
-    AnsiConsole.Ask<string>("What are you working on today?")
+    let project = AnsiConsole.Ask<string>("What are you working on today?")
+
+    let createDotnetProject =
+        AnsiConsole.Confirm("Create a new .NET project?", defaultValue = false)
+
+    (project, createDotnetProject)
 
 let fixName n =
     n |> Regex.replace @"[^\w\d]" "-" |> Regex.replace "-+" "-"
 
-let name = displayPrompt ()
+let name, createDotnetProject = displayPrompt ()
 let today = DateTime.Now.ToString("yyyy-MM-dd")
 let fixedName = fixName name
 let folderName = $"{today}--{fixedName}"
@@ -77,4 +83,21 @@ startInfo.WindowStyle <- ProcessWindowStyle.Hidden
 startInfo.UseShellExecute <- true
 let _process = Process.Start(startInfo)
 let _exited = _process.WaitForExit(TimeSpan.FromSeconds(5.))
+
+if createDotnetProject then
+
+    Rule() |> Rule.withTitle "Create a new .NET project" |> AnsiConsole.write
+
+    let targetFolder = folder </> fixedName
+
+    Directory.CreateDirectory(targetFolder) |> ignore
+
+    let dotnetStartInfo = ProcessStartInfo("InitProject.exe")
+    dotnetStartInfo.WorkingDirectory <- targetFolder
+
+    let _dotnetProcess = Process.Start(dotnetStartInfo)
+    let _dotnetExited = _dotnetProcess.WaitForExit()
+
+    AnsiConsole.Confirm("Press enter to exit ?", defaultValue = true) |> ignore
+
 ()

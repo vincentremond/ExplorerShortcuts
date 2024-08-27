@@ -1,4 +1,5 @@
 source https://api.nuget.org/v3/index.json
+source ~/nuget
 
 storage: none
 framework: auto-detect
@@ -9,3 +10,12 @@ nuget FSharpPlus
 nuget LibGit2Sharp
 nuget Newtonsoft.Json
 nuget Spectre.Console
+nuget Pinicola.FSharp.SpectreConsole
+
+# Tests
+nuget coverlet.collector
+nuget Microsoft.NET.Test.Sdk
+nuget NUnit
+nuget NUnit.Analyzers
+nuget NUnit3TestAdapter
+nuget FsUnit
