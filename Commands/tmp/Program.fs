@@ -1,3 +1,5 @@
+module Program
+
 open System
 open System.Diagnostics
 open System.IO
@@ -5,6 +7,11 @@ open ExplorerShortcuts.Common
 open Newtonsoft.Json
 open Pinicola.FSharp.SpectreConsole
 open Spectre.Console
+
+[<RequireQualifiedAccess>]
+type CreateDotnetProject =
+    | No
+    | Yes of Type: string
 
 let preferredLocations =
     let userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
@@ -35,8 +42,22 @@ let displayPrompt () =
 
     let project = AnsiConsole.Ask<string>("What are you working on today?")
 
-    let createDotnetProject =
-        AnsiConsole.Confirm("Create a new .NET project?", defaultValue = false)
+    // let createDotnetProject =
+    //     AnsiConsole.Confirm("Create a new .NET project?", defaultValue = false)
+
+    let selectionPrompt = SelectionPrompt()
+    selectionPrompt.Title <- "Create a new .NET project?"
+
+    selectionPrompt.AddChoices(
+        [
+            CreateDotnetProject.No
+            (CreateDotnetProject.Yes "fsharp")
+            (CreateDotnetProject.Yes "csharp")
+        ]
+    )
+    |> ignore
+
+    let createDotnetProject = AnsiConsole.Prompt(selectionPrompt)
 
     (project, createDotnetProject)
 
@@ -84,7 +105,9 @@ startInfo.UseShellExecute <- true
 let _process = Process.Start(startInfo)
 let _exited = _process.WaitForExit(TimeSpan.FromSeconds(5.))
 
-if createDotnetProject then
+match createDotnetProject with
+| CreateDotnetProject.No -> ()
+| CreateDotnetProject.Yes ``type`` ->
 
     Rule() |> Rule.withTitle "Create a new .NET project" |> AnsiConsole.write
 
@@ -92,7 +115,15 @@ if createDotnetProject then
 
     Directory.CreateDirectory(targetFolder) |> ignore
 
-    let dotnetStartInfo = ProcessStartInfo("InitProject.exe")
+    let dotnetStartInfo =
+        ProcessStartInfo(
+            "InitProject.exe",
+            [
+                "--lang"
+                ``type``
+            ]
+        )
+
     dotnetStartInfo.WorkingDirectory <- targetFolder
 
     let _dotnetProcess = Process.Start(dotnetStartInfo)
