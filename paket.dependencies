@@ -6,11 +6,12 @@ framework: auto-detect
 nuget FParsec
 nuget FSharp.Core
 nuget FSharp.Data.LiteralProviders
-nuget FSharpPlus
 nuget LibGit2Sharp
 nuget Newtonsoft.Json
 nuget Spectre.Console
+nuget Pinicola.FSharp
 nuget Pinicola.FSharp.SpectreConsole
+nuget Vanara.PInvoke.User32
 
 # Tests
 nuget coverlet.collector

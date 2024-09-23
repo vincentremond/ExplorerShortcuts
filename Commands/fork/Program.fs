@@ -6,10 +6,9 @@ open ExplorerShortcuts.Common
 [<STAThread>]
 let main _args =
 
-    let StartDirectory strStartDirectory as startDirectory =
-        StartDirectory.CurrentDirectory
+    let startDirectory = StartDirectory.CurrentDirectory
 
-    printfn $"Starting Fork from %s{strStartDirectory}"
+    printfn $"Starting Fork from %s{startDirectory.Value}"
 
     let appDataDirectory =
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
@@ -23,7 +22,7 @@ let main _args =
     printfn $"Fork path is %s{forkPath} (Exists: %b{forkPathInfo.Exists})"
     printf "Starting Fork..."
 
-    Process.startAndForget startDirectory (Executable forkPath) [| $@"""%s{strStartDirectory}""" |]
+    Process.startAndForget startDirectory (Executable forkPath) [| $@"""%s{startDirectory.Value}""" |]
 
     printfn " done."
     0 // return an integer exit code

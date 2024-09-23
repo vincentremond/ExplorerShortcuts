@@ -1,3 +1,4 @@
 FSharp.Core
 FSharp.Data.LiteralProviders
 Spectre.Console
+Vanara.PInvoke.User32

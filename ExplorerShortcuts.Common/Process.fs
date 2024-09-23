@@ -6,9 +6,11 @@ open System.Runtime.InteropServices
 type Executable = | Executable of string
 
 type StartDirectory =
+    private
     | StartDirectory of string
 
     static member CurrentDirectory = StartDirectory System.Environment.CurrentDirectory
+    static member With value = StartDirectory value
 
     member this.Value =
         match this with
