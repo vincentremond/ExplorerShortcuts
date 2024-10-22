@@ -32,7 +32,12 @@ let main _args =
         |> Seq.sort
         |> Seq.toArray
 
-    let slnPath = Environment.CurrentDirectory |> Directory.getAllFiles "*.sln"
+    let solutionFiles =
+        [|
+            "*.sln"
+            "*.slnx"
+        |]
+        |> Array.collect (fun ext -> Directory.getAllFiles ext Environment.CurrentDirectory)
 
     AnsiConsole.Write(FigletText(SpectreConsole.FigletFont.AnsiShadow, "Visual Studio"))
     AnsiConsole.WriteLine()
@@ -53,7 +58,7 @@ let main _args =
     AnsiConsole.WriteLine($"Using Visual Studio located : '{path}'")
 
     let solutionFile =
-        match slnPath with
+        match solutionFiles with
         | [||] -> failwithf $"No solution file found in %A{Environment.CurrentDirectory}"
         | [| x |] -> x
         | _ ->
@@ -61,7 +66,7 @@ let main _args =
                 SelectionPrompt<string>()
                 |> SelectionPrompt.setTitle "Solution ?"
                 |> SelectionPrompt.pageSize 10
-                |> SelectionPrompt.addChoices slnPath
+                |> SelectionPrompt.addChoices solutionFiles
             )
 
     AnsiConsole.WriteLine()

@@ -100,16 +100,12 @@ let main args =
         |> List.sortByDescending snd
         |> List.toArray
 
-    let slnPath = Environment.CurrentDirectory |> Directory.getAllFiles "*.sln"
-
-    // let figletText =
-    //     FigletText(SpectreConsole.FigletFont.AnsiShadow, "JetBrains Rider").Centered()
-
-    // figletText.Pad <- false
-    // let panel = Panel(figletText).PadTop(1).PadBottom(0).PadLeft(1).PadRight(1)
-    // panel.Expand <- false
-    // panel.Width <- 110
-    // AnsiConsole.Write(panel)
+    let solutionFiles =
+        [|
+            "*.sln"
+            "*.slnx"
+        |]
+        |> Array.collect (fun ext -> Directory.getAllFiles ext Environment.CurrentDirectory)
 
     let logo = FSharp.Data.LiteralProviders.TextFile.``logo.txt``.Text
 
@@ -135,7 +131,7 @@ let main args =
     )
 
     let solutionFile =
-        match slnPath with
+        match solutionFiles with
         | [||] -> failwithf $"No solution file found in %A{Environment.CurrentDirectory}"
         | [| x |] -> x
         | _ ->
@@ -143,7 +139,7 @@ let main args =
                 SelectionPrompt<string>()
                 |> SelectionPrompt.setTitle "Solution ?"
                 |> SelectionPrompt.pageSize (10)
-                |> SelectionPrompt.addChoices slnPath
+                |> SelectionPrompt.addChoices solutionFiles
             )
 
     AnsiConsole.MarkupLineInterpolated($"Opening solution file '[bold]{solutionFile}[/]'")
