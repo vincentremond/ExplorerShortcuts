@@ -31,7 +31,7 @@ New-Item -Path $FsProjDir -ItemType Directory
 </Project>
 "@ | Out-File $FsProjPath
 
-"FS.Core" | Out-File $PaketReferencesPath
+"FSharp.Core" | Out-File $PaketReferencesPath
 
 $ProgramContents = @"
 open System

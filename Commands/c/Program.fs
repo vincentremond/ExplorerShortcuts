@@ -99,7 +99,12 @@ let main _ =
                     Process.startAndForget startDirectory (Executable vsCodePath) [| arg |]
             with e ->
                 MessageBox.show "error" (e.ToString())
-                File.WriteAllText($"c.error.{DateTimeOffset.Now:yyyyMMddHHmmssfff}.txt", e.ToString())
+
+                File.WriteAllText(
+                    $"explorershortcuts.c.error.{DateTimeOffset.Now:yyyyMMddHHmmssfff}.txt",
+                    e.ToString()
+                )
+
                 reraise ()
         )
 
