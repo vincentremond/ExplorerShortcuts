@@ -32,7 +32,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "tmp", "Commands\tmp\tmp.fsp
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "vs", "Commands\vs\vs.fsproj", "{D44DC931-DDBA-07C4-3D5D-0274A97EE1CA}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "cursor", "Commands\cursor\cursor.fsproj", "{2DE1B6F2-91C7-2DBF-8878-009177FC1C62}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "csr", "Commands\csr\csr.fsproj", "{2DE1B6F2-91C7-2DBF-8878-009177FC1C62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -18,7 +18,7 @@
     <ProjectReference Include="..\Commands\rider\rider.fsproj" />
     <ProjectReference Include="..\Commands\vs\vs.fsproj" />
     <ProjectReference Include="..\Commands\e\e.fsproj" />
-    <ProjectReference Include="..\Commands\cursor\cursor.fsproj" />
+    <ProjectReference Include="..\Commands\csr\csr.fsproj" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
