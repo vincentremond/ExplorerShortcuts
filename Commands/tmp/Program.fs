@@ -27,10 +27,11 @@ let preferredLocations =
     }
     |> List.ofSeq
 
-let location =
+let tmpLocation =
     preferredLocations
     |> List.tryPick Directory.tryPath
     |> Option.defaultWith (fun _ -> failwith $"Could not find preferred location %A{preferredLocations}")
+    |> _.FullName
 
 let displayPrompt () =
     Console.Title <- " ... TMP ... "
@@ -61,19 +62,22 @@ let displayPrompt () =
 
     (project, createDotnetProject)
 
-let fixName n =
-    n |> Regex.replace @"[^\w\d]" "-" |> Regex.replace "-+" "-"
-
 let name, createDotnetProject = displayPrompt ()
+let thisMonth = DateTime.Now.ToString("yyyy-MM")
 let today = DateTime.Now.ToString("yyyy-MM-dd")
-let fixedName = fixName name
-let folderName = $"{today}--{fixedName}"
+let fixedName = name |> Regex.replace @"[^\w\d]" "-" |> Regex.replace "-+" "-"
+let newFolderName = $"{today}--{fixedName}"
 
-let folder = location.FullName </> folderName
+// Create month folder if it doesn't exist
+let monthFolder = tmpLocation </> thisMonth
 
-Directory.CreateDirectory(folder) |> ignore
+if not (Directory.Exists monthFolder) then
+    Directory.CreateDirectory(monthFolder) |> ignore
 
-let notes = folder </> "notes.md"
+let newTmpFolder = tmpLocation </> newFolderName
+Directory.CreateDirectory(newTmpFolder) |> ignore
+
+let notes = newTmpFolder </> "notes.md"
 
 [
     $"# {name}"
@@ -91,7 +95,7 @@ let workspaceContents =
     |}
     |> (fun x -> JsonConvert.SerializeObject(x, Formatting.Indented))
 
-let workspaceFile = folder </> $"_{fixedName}_.code-workspace"
+let workspaceFile = newTmpFolder </> $"_{fixedName}_.code-workspace"
 
 File.writeAllText workspaceFile workspaceContents
 File.hide workspaceFile
@@ -99,7 +103,7 @@ File.hide workspaceFile
 let startInfo =
     ProcessStartInfo("cmd.exe", $"/c code.cmd \"{workspaceFile}\" --goto notes.md:5:0")
 
-startInfo.WorkingDirectory <- folder
+startInfo.WorkingDirectory <- newTmpFolder
 startInfo.WindowStyle <- ProcessWindowStyle.Hidden
 startInfo.UseShellExecute <- true
 let _process = Process.Start(startInfo)
@@ -111,7 +115,7 @@ match createDotnetProject with
 
     Rule() |> Rule.withTitle "Create a new .NET project" |> AnsiConsole.write
 
-    let targetFolder = folder </> fixedName
+    let targetFolder = newTmpFolder </> fixedName
 
     Directory.CreateDirectory(targetFolder) |> ignore
 
