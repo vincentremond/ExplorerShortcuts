@@ -1,5 +1,4 @@
 source https://api.nuget.org/v3/index.json
-source ~/nuget
 
 storage: none
 framework: auto-detect
@@ -9,8 +8,6 @@ nuget FSharp.Data.LiteralProviders
 nuget LibGit2Sharp
 nuget Newtonsoft.Json
 nuget Spectre.Console
-nuget Pinicola.FSharp
-nuget Pinicola.FSharp.SpectreConsole
 nuget Vanara.PInvoke.User32
 
 # Tests
