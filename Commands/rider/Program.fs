@@ -100,12 +100,22 @@ let main args =
         |> List.sortByDescending snd
         |> List.toArray
 
+    let currentDirectory = Environment.CurrentDirectory
+
     let solutionFiles =
         [|
             "*.sln"
             "*.slnx"
         |]
-        |> Array.collect (fun ext -> Directory.getAllFiles ext Environment.CurrentDirectory)
+        |> Array.collect (fun ext -> Directory.getAllFiles ext currentDirectory)
+        |> Array.filter (fun file ->
+            let relativePath = Path.relativePath currentDirectory file
+
+            let isPinicolaSubModulePath = relativePath |> String.startsWith "Pinicola.FSharp"
+
+            not isPinicolaSubModulePath
+
+        )
 
     let logo = FSharp.Data.LiteralProviders.TextFile.``logo.txt``.Text
 
@@ -113,10 +123,7 @@ let main args =
 
     let (path, (major, minor, build)) =
         match installFolders with
-        | [||] ->
-            failwithf
-                "No JetBrains Rider installation found in %A"
-                (possibleLocations |> List.map (fun (a, b) -> $"{a}\\{b}"))
+        | [||] -> failwithf "No JetBrains Rider installation found in %A" (possibleLocations |> List.map (fun (a, b) -> $"{a}\\{b}"))
         | [| x |] -> x
         | _ ->
             AnsiConsole.Prompt(
@@ -126,13 +133,11 @@ let main args =
                 |> SelectionPrompt.addChoices installFolders
             )
 
-    AnsiConsole.MarkupLineInterpolated(
-        $"Using JetBrains Rider [blue]{major}.{minor}.{build}[/] located in : '[bold]{path}[/]'"
-    )
+    AnsiConsole.MarkupLineInterpolated($"Using JetBrains Rider [blue]{major}.{minor}.{build}[/] located in : '[bold]{path}[/]'")
 
     let solutionFile =
         match solutionFiles with
-        | [||] -> failwithf $"No solution file found in %A{Environment.CurrentDirectory}"
+        | [||] -> failwithf $"No solution file found in %A{currentDirectory}"
         | [| x |] -> x
         | _ ->
             AnsiConsole.Prompt(

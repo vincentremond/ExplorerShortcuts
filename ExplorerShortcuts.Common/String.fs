@@ -23,3 +23,6 @@ module String =
 
     let replaceAll (replacements: seq<string * string>) (s: string) : string =
         replacements |> Seq.fold (fun s -> s.Replace) s
+
+    let startsWith (prefix: string) (s: string) = s.StartsWith(prefix)
+    let startsWithCI (prefix: string) (s: string) = s.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase)
