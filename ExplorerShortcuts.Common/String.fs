@@ -25,4 +25,6 @@ module String =
         replacements |> Seq.fold (fun s -> s.Replace) s
 
     let startsWith (prefix: string) (s: string) = s.StartsWith(prefix)
-    let startsWithCI (prefix: string) (s: string) = s.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase)
+
+    let startsWithCI (prefix: string) (s: string) =
+        s.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase)
