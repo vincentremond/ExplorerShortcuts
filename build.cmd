@@ -3,4 +3,4 @@
 dotnet tool restore
 dotnet build -- %*
 
-add-to-path .\ExplorerShortcuts\bin\Debug
+AddToPath .\ExplorerShortcuts\bin\Debug

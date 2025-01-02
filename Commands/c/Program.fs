@@ -6,6 +6,7 @@ open Fargo
 open Fargo.Operators
 open ExplorerShortcuts.Common
 open Pinicola.FSharp
+open Pinicola.FSharp.Fargo
 
 [<RequireQualifiedAccess>]
 type CliOptions =
