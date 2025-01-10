@@ -17,23 +17,13 @@ type StartDirectory =
         | StartDirectory path -> path
 
 module Process =
-    let startAndForget (StartDirectory workingDirectory) (Executable path) arguments =
-        let arguments = String.concat " " arguments
-
+    let startAndForget (StartDirectory workingDirectory) (Executable path) (arguments: string seq) =
         Process.Start(ProcessStartInfo(path, arguments, WorkingDirectory = workingDirectory))
         |> ignore
 
-    let getOutput (StartDirectory workingDirectory) (Executable path) arguments =
-        let arguments = String.concat " " arguments
-
+    let getOutput (StartDirectory workingDirectory) (Executable path) (arguments: string seq) =
         let psi =
-            ProcessStartInfo(
-                path,
-                arguments,
-                WorkingDirectory = workingDirectory,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            )
+            ProcessStartInfo(path, arguments, WorkingDirectory = workingDirectory, RedirectStandardOutput = true, RedirectStandardError = true)
 
         let p = Process.Start(psi)
         let output = p.StandardOutput.ReadToEnd()
@@ -41,8 +31,7 @@ module Process =
         p.WaitForExit()
 
         if p.ExitCode <> 0 || String.isNotNullOrEmpty error then
-            failwithf
-                $"Process exited with code %d{p.ExitCode}.\n----\nError:\n%s{error}.\n----\nOutput:\n%s{output}\n----\n"
+            failwithf $"Process exited with code %d{p.ExitCode}.\n----\nError:\n%s{error}.\n----\nOutput:\n%s{output}\n----\n"
 
         output
 
