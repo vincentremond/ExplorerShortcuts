@@ -5,8 +5,10 @@
     <TargetFramework>net9.0</TargetFramework>
     <WarningsAsErrors>FS0025</WarningsAsErrors>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ApplicationIcon>e.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="e.ico" />
     <None Include="paket.references" />
     <Compile Include="Program.fs" />
   </ItemGroup>

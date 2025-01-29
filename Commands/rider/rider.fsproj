@@ -5,10 +5,12 @@
     <TargetFramework>net9.0</TargetFramework>
     <WarningsAsErrors>FS0025</WarningsAsErrors>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ApplicationIcon>rider.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
     <Compile Include="Program.fs" />
+    <None Include="rider.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ExplorerShortcuts.Common\ExplorerShortcuts.Common.fsproj" />
