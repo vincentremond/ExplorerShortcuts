@@ -12,13 +12,16 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Commands\c\c.fsproj" />
+    <ProjectReference Include="..\Commands\csr\csr.fsproj" />
+    <ProjectReference Include="..\Commands\e\e.fsproj" />
     <ProjectReference Include="..\Commands\fork\fork.fsproj" />
     <ProjectReference Include="..\Commands\repo\repo.fsproj" />
-    <ProjectReference Include="..\Commands\tmp\tmp.fsproj" />
     <ProjectReference Include="..\Commands\rider\rider.fsproj" />
+    <ProjectReference Include="..\Commands\svg2dxf\svg2dxf.fsproj" />
+    <ProjectReference Include="..\Commands\svg2pdf\svg2pdf.fsproj" />
+    <ProjectReference Include="..\Commands\svg2png\svg2png.fsproj" />
+    <ProjectReference Include="..\Commands\tmp\tmp.fsproj" />
     <ProjectReference Include="..\Commands\vs\vs.fsproj" />
-    <ProjectReference Include="..\Commands\e\e.fsproj" />
-    <ProjectReference Include="..\Commands\csr\csr.fsproj" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

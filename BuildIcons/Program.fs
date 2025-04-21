@@ -135,6 +135,9 @@ let icons = [
     Solid, '\uf6f0', +0, +0, "rider"
     Solid, '\uf0e7', +0, +0, "tmp"
     Solid, '\uf121', +0, +0, "vs"
+    Solid, '\uf1c5', +0, +0, "svg2png"
+    Solid, '\uf1c5', +0, +0, "svg2pdf"
+    Solid, '\uf1c5', +0, +0, "svg2dxf"
 ]
 
 for set, icon, xFix, yFix, name in icons do

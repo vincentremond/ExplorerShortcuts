@@ -1,9 +1,21 @@
 ﻿namespace ExplorerShortcuts.Common
 
 open System.Diagnostics
-open System.Runtime.InteropServices
 
-type Executable = | Executable of string
+type Executable =
+    | Executable of string
+
+    static member search (name: string) locations =
+        locations
+        |> Seq.tryPick (fun location ->
+            let fullPath = System.IO.Path.Join(location, name)
+
+            if System.IO.File.Exists(fullPath) then
+                Some(Executable fullPath)
+            else
+                None
+
+        )
 
 type StartDirectory =
     private
@@ -20,6 +32,21 @@ module Process =
     let startAndForget (StartDirectory workingDirectory) (Executable path) (arguments: string seq) =
         Process.Start(ProcessStartInfo(path, arguments, WorkingDirectory = workingDirectory))
         |> ignore
+
+    let startAndWait (StartDirectory workingDirectory) (Executable path) (arguments: string seq) =
+        let psi =
+            ProcessStartInfo(
+                path,
+                arguments,
+                WorkingDirectory = workingDirectory,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            )
+
+        let p = Process.Start(psi)
+        p.WaitForExit()
+        p.ExitCode
 
     let getOutput (StartDirectory workingDirectory) (Executable path) (arguments: string seq) =
         let psi =
