@@ -77,7 +77,9 @@ if not (Directory.Exists monthFolder) then
 let newTmpFolder = tmpLocation </> newFolderName
 Directory.CreateDirectory(newTmpFolder) |> ignore
 
-let notes = newTmpFolder </> "notes.md"
+
+let notesFileName = "notes.md"
+let notesFilePath = newTmpFolder </> notesFileName
 
 [
     $"# {name}"
@@ -86,7 +88,7 @@ let notes = newTmpFolder </> "notes.md"
     ""
     "**your notes here**"
 ]
-|> (File.writeAllLines notes)
+|> (File.writeAllLines notesFilePath)
 
 let workspaceContents =
     {|
@@ -101,7 +103,18 @@ File.writeAllText workspaceFile workspaceContents
 File.hide workspaceFile
 
 let startInfo =
-    ProcessStartInfo("cmd.exe", $"/c code.cmd \"{workspaceFile}\" --goto notes.md:5:0")
+    ProcessStartInfo(
+        "c.exe",
+        [
+            "open"
+            "--file"
+            notesFilePath
+            "--line"
+            "5"
+            "--column"
+            "0"
+        ]
+    )
 
 startInfo.WorkingDirectory <- newTmpFolder
 startInfo.WindowStyle <- ProcessWindowStyle.Hidden

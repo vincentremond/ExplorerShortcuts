@@ -80,6 +80,7 @@ let main _ =
                     let startDirectory = StartDirectory.With directory
 
                     Process.startAndForget startDirectory (Executable vsCodePath) [|
+                        startDirectory.Value
                         "--goto"
                         gotoArgValue
                     |]
