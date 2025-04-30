@@ -17,6 +17,7 @@ let preferredLocations =
     let userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
 
     seq {
+        yield "G:\My Drive\TMP"
         yield (userProfile </> "TMP")
         yield @"D:\TMP\"
 
