@@ -1,12 +1,20 @@
 ﻿namespace svg2xxx
 
+open System
 open System.IO
 open ExplorerShortcuts.Common
 open Fargo
 open Pinicola.FSharp.Fargo
 open Pinicola.FSharp.SpectreConsole
+open Pinicola.FSharp.IO
 
 module Convert =
+
+    type Target =
+        | Pdf
+        | Png
+        | Dxf
+        | Ico
 
     let commandLineParser targetExt =
         fargo {
@@ -15,8 +23,84 @@ module Convert =
             return (input, output)
         }
 
-    let run commandName (ext: string) =
+    let inkscapeExport inkscapePath (outputPath: string) (svgPath: string) size =
+
+        let arguments = [
+            match size with
+            | Some s ->
+                $"--export-width=%i{s}"
+                $"--export-height=%i{s}"
+            | None -> ()
+            "--export-filename"
+            outputPath
+            svgPath
+        ]
+
+        let exitCode =
+            Process.startAndWait StartDirectory.CurrentDirectory inkscapePath arguments
+
+        if exitCode <> 0 then
+            failwith $"Inkscape failed with exit code {exitCode}"
+
+    let icoExport inkscapePath (outputPath: string) (svgPath: string) =
+
+        let magick = Path.findInPathEnvVar "magick.exe" |> Executable
+
+        let sizes = [
+            16
+            24
+            32
+            48
+            64
+            128
+            256
+            512
+        ]
+
+        let tempFolder = Path.GetTempPath()
+        let uniqueIdentifier = $"{DateTimeOffset.Now:yyyyMMssHHmmss}_{Guid.NewGuid():N}"
+
+        let pngPaths =
+            sizes
+            |> List.map (fun size ->
+                let tempFileName = $"{uniqueIdentifier}_{size}.png"
+                let tempFilePath = tempFolder </> tempFileName
+
+                AnsiConsole.status ()
+                |> Status.start
+                    $"Exporting {size}x{size} PNG"
+                    (fun _ ->
+                        inkscapeExport inkscapePath tempFilePath svgPath (Some size)
+                        AnsiConsole.markupLineInterpolated $"[grey]{tempFilePath}[/] created successfully"
+                    )
+
+                tempFilePath
+            )
+
+        let magickArguments = [
+            "convert"
+            for pngPath in pngPaths do
+                pngPath
+            outputPath
+        ]
+
+        let exitCode =
+            Process.startAndWait StartDirectory.CurrentDirectory magick magickArguments
+
+        if exitCode <> 0 then
+            failwith $"Magick failed with exit code {exitCode}"
+            
+        pngPaths |> Seq.iter File.Delete
+
+    let run commandName target =
         AnsiConsole.markupLineInterpolated $"[green]{commandName}[/]"
+
+        let ext =
+            match target with
+            | Pdf -> ".pdf"
+            | Png -> ".png"
+            | Dxf -> ".dxf"
+            | Ico -> ".ico"
 
         FargoCmdLine.run
             commandName
@@ -29,24 +113,18 @@ module Convert =
 
                 let inkscapePossibleLocations = [ @"C:\Program Files\Inkscape\bin" ]
 
-                let inkscape =
+                let inkscapePath =
                     match Executable.search "inkscape.exe" inkscapePossibleLocations with
                     | None -> failwith $"Inkscape not found in {inkscapePossibleLocations}"
                     | Some i -> i
 
+                match target with
+                | Dxf
+                | Png
+                | Pdf -> inkscapeExport inkscapePath outputPath svgPath None
+                | Ico -> icoExport inkscapePath outputPath svgPath
+
                 AnsiConsole.markupLineInterpolated $"Converting [green]{svgPath}[/] to [green]{outputPath}[/]"
-
-                let arguments = [
-                    "--export-filename"
-                    outputPath
-                    svgPath
-                ]
-
-                let exitCode =
-                    Process.startAndWait StartDirectory.CurrentDirectory inkscape arguments
-
-                if exitCode <> 0 then
-                    failwith $"Inkscape failed with exit code {exitCode}"
 
                 if not (File.Exists outputPath) then
                     failwith $"Output file {outputPath} not found"
@@ -56,6 +134,7 @@ module Convert =
                 ()
             )
 
-    let rec svg2pdf () = run (nameof svg2pdf) ".pdf"
-    let rec svg2png () = run (nameof svg2png) ".png"
-    let rec svg2dxf () = run (nameof svg2dxf) ".dxf"
+    let rec svg2pdf () = run (nameof svg2pdf) Pdf
+    let rec svg2png () = run (nameof svg2png) Png
+    let rec svg2dxf () = run (nameof svg2dxf) Dxf
+    let rec svg2ico () = run (nameof svg2ico) Ico

@@ -22,6 +22,7 @@
     <ProjectReference Include="..\Commands\svg2png\svg2png.fsproj" />
     <ProjectReference Include="..\Commands\tmp\tmp.fsproj" />
     <ProjectReference Include="..\Commands\vs\vs.fsproj" />
+    <ProjectReference Include="..\Commands\svg2ico\svg2ico.fsproj" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
