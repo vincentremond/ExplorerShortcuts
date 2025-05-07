@@ -89,7 +89,7 @@ module Convert =
 
         if exitCode <> 0 then
             failwith $"Magick failed with exit code {exitCode}"
-            
+
         pngPaths |> Seq.iter File.Delete
 
     let run commandName target =

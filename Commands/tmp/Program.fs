@@ -78,7 +78,6 @@ if not (Directory.Exists monthFolder) then
 let newTmpFolder = tmpLocation </> newFolderName
 Directory.CreateDirectory(newTmpFolder) |> ignore
 
-
 let notesFileName = "notes.md"
 let notesFilePath = newTmpFolder </> notesFileName
 

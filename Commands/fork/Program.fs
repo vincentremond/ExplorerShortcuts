@@ -1,28 +1,31 @@
 open System
-open System.IO
 open ExplorerShortcuts.Common
+open Pinicola.FSharp.SpectreConsole
+open Pinicola.FSharp.IO
 
-[<EntryPoint>]
-[<STAThread>]
-let main _args =
+let startDirectory = StartDirectory.CurrentDirectory
 
-    let startDirectory = StartDirectory.CurrentDirectory
+AnsiConsole.markupLineInterpolated $"Starting Fork from [bold]{startDirectory.Value}[/]"
 
-    printfn $"Starting Fork from %s{startDirectory.Value}"
+let appDataDirectory =
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
 
-    let appDataDirectory =
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+AnsiConsole.markupLineInterpolated $"AppData directory is [bold]{appDataDirectory}[/]"
 
-    printfn $"AppData directory is %s{appDataDirectory}"
+let possibleLocations = [
+    appDataDirectory </> "Fork" </> "current"
+    appDataDirectory </> "Fork"
+]
 
-    let forkSubPath = @"Fork\Fork.exe"
-    let forkPath = Path.Combine(appDataDirectory, forkSubPath)
-    let forkPathInfo = forkPath |> FileInfo
+let location = possibleLocations |> Path.tryFindFileInLocations "Fork.exe"
 
-    printfn $"Fork path is %s{forkPath} (Exists: %b{forkPathInfo.Exists})"
-    printf "Starting Fork..."
+let forkPath =
+    match location with
+    | Some path -> path
+    | None -> failwith $"Fork.exe not found in {possibleLocations}"
 
-    Process.startAndForget startDirectory (Executable forkPath) [| startDirectory.Value |]
+AnsiConsole.markup "Starting Fork... "
 
-    printfn " done."
-    0 // return an integer exit code
+Process.startAndForget startDirectory (Executable forkPath) [| startDirectory.Value |]
+
+AnsiConsole.markupLine " [green]✔[/] done."
