@@ -42,6 +42,9 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BuildIcons", "BuildIcons\BuildIcons.fsproj", "{617C62D4-C024-4105-BF77-AD56B2858B17}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pinicola.FSharp", "Pinicola.FSharp", "{945A1A41-EEDC-465A-B2CD-F2CFA2821EA7}"
+	ProjectSection(SolutionItems) = preProject
+		Pinicola.FSharp\ListBuilder.fs = Pinicola.FSharp\ListBuilder.fs
+	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "svg2xxx", "Commands\svg2xxx\svg2xxx.fsproj", "{2607D56D-DE2F-489E-9577-AC36AA392796}"
 EndProject
