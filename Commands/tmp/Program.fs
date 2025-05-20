@@ -24,7 +24,7 @@ let preferredPersonalLocations = list { yield "Perso" </> "tmp" }
 let preferredDefaultLocations =
 
     list {
-        yield "G:\My Drive\TMP"
+        yield @"G:\My Drive\TMP"
         yield (userProfile </> "TMP")
         yield @"D:\TMP\"
 
@@ -164,4 +164,4 @@ let main args =
 
         AnsiConsole.Confirm("Press enter to exit ?", defaultValue = true) |> ignore
 
-    ()
+    0

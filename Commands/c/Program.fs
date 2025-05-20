@@ -6,6 +6,7 @@ open Fargo
 open Fargo.Operators
 open ExplorerShortcuts.Common
 open Pinicola.FSharp.Fargo
+open Pinicola.FSharp.SpectreConsole
 
 [<RequireQualifiedAccess>]
 type CliOptions =
@@ -65,6 +66,8 @@ let main _ =
                     possiblePaths
                     |> List.tryFind File.Exists
                     |> Option.defaultWith (fun _ -> failwith $"Visual Studio Code not found (%A{possiblePaths})")
+
+                AnsiConsole.markupLineInterpolated $"Opening Visual Studio Code at [bold]{vsCodePath}[/]"
 
                 match options with
                 | OpenFile(fileName, line, column) ->

@@ -3,7 +3,6 @@ module Program
 open System
 open System.IO
 open ExplorerShortcuts.Common
-open Pinicola.FSharp
 
 try
 
