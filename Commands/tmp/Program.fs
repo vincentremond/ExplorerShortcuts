@@ -18,6 +18,13 @@ type Location =
     | Default
     | Personal
 
+    static member fromString s =
+        match String.toLower s with
+        | "personal"
+        | "perso"
+        | "p" -> Personal
+        | _ -> Default
+
 let userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
 let preferredPersonalLocations = list { yield "Perso" </> "tmp" }
 
@@ -65,7 +72,7 @@ let displayPrompt location =
 let main args =
     let location =
         match args with
-        | [| x |] when String.equalsInvariantCultureIgnoreCase x "personal" -> Personal
+        | [| x |] -> Location.fromString x
         | _ -> Default
 
     let locationSource =
