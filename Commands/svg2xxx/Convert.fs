@@ -2,6 +2,7 @@
 
 open System
 open System.IO
+open System.Threading.Tasks
 open ExplorerShortcuts.Common
 open Fargo
 open Pinicola.FSharp.Fargo
@@ -61,21 +62,25 @@ module Convert =
         let uniqueIdentifier = $"{DateTimeOffset.Now:yyyyMMssHHmmss}_{Guid.NewGuid():N}"
 
         let pngPaths =
-            sizes
-            |> List.map (fun size ->
-                let tempFileName = $"{uniqueIdentifier}_{size}.png"
-                let tempFilePath = tempFolder </> tempFileName
+            Progress.init ()
+            |> Progress.withColumns [
+                Progress.Columns.spinner
+                Progress.Columns.taskDescription
+                Progress.Columns.elapsedTime
+            ]
+            |> Progress.withHideCompleted false
+            |> Progress.withAutoClear false
+            |> Progress.withAutoRefresh true
+            |> Progress.runTasks
+                sizes
+                (fun size -> $"Exporting {size}x{size}")
+                (fun size ->
+                    let tempFileName = $"{uniqueIdentifier}_{size}.png"
+                    let tempFilePath = tempFolder </> tempFileName
 
-                AnsiConsole.status ()
-                |> Status.start
-                    $"Exporting {size}x{size} PNG"
-                    (fun _ ->
-                        inkscapeExport inkscapePath tempFilePath svgPath (Some size)
-                        AnsiConsole.markupLineInterpolated $"[grey]{tempFilePath}[/] created successfully"
-                    )
-
-                tempFilePath
-            )
+                    inkscapeExport inkscapePath tempFilePath svgPath (Some size)
+                    tempFilePath
+                )
 
         let magickArguments = [
             "convert"
