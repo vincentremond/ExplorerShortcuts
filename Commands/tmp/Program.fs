@@ -81,7 +81,7 @@ let main args =
         | Personal -> preferredPersonalLocations
 
     let tmpLocation =
-        preferredDefaultLocations
+        locationSource
         |> List.tryPick Directory.tryPath
         |> Option.defaultWith (fun _ -> failwith $"Could not find preferred location %A{locationSource}")
         |> _.FullName
