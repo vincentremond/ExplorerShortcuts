@@ -123,10 +123,7 @@ let main args =
 
     let (path, (major, minor, build)) =
         match installFolders with
-        | [||] ->
-            failwithf
-                "No JetBrains Rider installation found in %A"
-                (possibleLocations |> List.map (fun (a, b) -> $"{a}\\{b}"))
+        | [||] -> failwithf "No JetBrains Rider installation found in %A" (possibleLocations |> List.map (fun (a, b) -> $"{a}\\{b}"))
         | [| x |] -> x
         | _ ->
             AnsiConsole.Prompt(
@@ -136,13 +133,17 @@ let main args =
                 |> SelectionPrompt.addChoices installFolders
             )
 
-    AnsiConsole.MarkupLineInterpolated(
-        $"Using JetBrains Rider [blue]{major}.{minor}.{build}[/] located in : '[bold]{path}[/]'"
-    )
+    AnsiConsole.MarkupLineInterpolated($"Using JetBrains Rider [blue]{major}.{minor}.{build}[/] located in : '[bold]{path}[/]'")
 
-    let solutionFile =
+    let target =
         match solutionFiles with
-        | [||] -> failwithf $"No solution file found in %A{currentDirectory}"
+        | [||] ->
+            AnsiConsole.MarkupLineInterpolated($"No solution files found in the current directory.")
+
+            match AnsiConsole.Confirm("Do you want to open the current directory in Rider ?") with
+            | true -> Environment.CurrentDirectory
+            | false -> failwith "No solution files found and user did not confirm to open the current directory."
+
         | [| x |] -> x
         | _ ->
             AnsiConsole.Prompt(
@@ -152,10 +153,10 @@ let main args =
                 |> SelectionPrompt.addChoices solutionFiles
             )
 
-    AnsiConsole.MarkupLineInterpolated($"Opening solution file '[bold]{solutionFile}[/]'")
+    AnsiConsole.MarkupLineInterpolated($"Opening : '[bold]{target}[/]'")
 
     let psi =
-        ProcessStartInfo(path, [| solutionFile |], UseShellExecute = true, CreateNoWindow = false)
+        ProcessStartInfo(path, [| target |], UseShellExecute = true, CreateNoWindow = false)
 
     Process.Start(psi) |> ignore
 

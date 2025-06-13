@@ -64,9 +64,9 @@ module Convert =
         let pngPaths =
             Progress.init ()
             |> Progress.withColumns [
-                Progress.Columns.spinner
-                Progress.Columns.taskDescription
-                Progress.Columns.elapsedTime
+                Progress.Columns.spinner()
+                Progress.Columns.taskDescription()
+                Progress.Columns.elapsedTime()
             ]
             |> Progress.withHideCompleted false
             |> Progress.withAutoClear false
