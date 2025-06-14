@@ -45,7 +45,7 @@ NUGET
       System.Security.Principal.Windows (>= 5.0)
     Newtonsoft.Json (13.0.3)
     NUnit (4.3.2)
-    NUnit.Analyzers (4.8.1)
+    NUnit.Analyzers (4.9.1)
     NUnit3TestAdapter (5.0)
       Microsoft.Testing.Extensions.VSTestBridge (>= 1.5.3)
       Microsoft.Testing.Platform.MSBuild (>= 1.5.3)
