@@ -19,8 +19,8 @@ module Convert =
 
     let commandLineParser targetExt =
         fargo {
-            let! input = opt "input" "i" "input" "The input .SVG file" |> reqOpt
-            and! output = opt "output" "o" "output" $"The output {targetExt} file"
+            let! input = arg "input" "The input .SVG file" |> reqArg
+            and! output = arg "output" $"The output {targetExt} file"
             return (input, output)
         }
 
