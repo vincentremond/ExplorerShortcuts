@@ -12,21 +12,34 @@ open Spectre.Console
 [<RequireQualifiedAccess>]
 type CreateDotnetProject =
     | No
-    | Yes of Type: string
+    | Yes of DotnetProjectLanguage
+
+and DotnetProjectLanguage =
+    | FSharp
+    | CSharp
+
+    member this.asString =
+        match this with
+        | FSharp -> "fsharp"
+        | CSharp -> "csharp"
 
 type Location =
     | Default
     | Personal
 
-    static member fromString s =
-        match String.toLower s with
-        | "personal"
-        | "perso"
-        | "p" -> Personal
-        | _ -> Default
+type Editor =
+    | VisualStudioCode
+    | Cursor
+
+type PromptResult = {
+    Subject: string
+    CreateDotnetProject: CreateDotnetProject
+    Location: Location
+    Editor: Editor
+}
 
 let userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
-let preferredPersonalLocations = list { yield "Perso" </> "tmp" }
+let preferredPersonalLocations = [ "Perso" </> "tmp" ]
 
 let preferredDefaultLocations =
 
@@ -41,42 +54,63 @@ let preferredDefaultLocations =
              |> Seq.map (fun onedrive -> onedrive </> "TMP"))
     }
 
-let displayPrompt location =
-    Console.Title <- " ... TMP ... "
+let select title (choices: 'a seq) =
+    let selectionPrompt = SelectionPrompt()
+    selectionPrompt.Title <- title
+    selectionPrompt.AddChoices(choices) |> ignore
+    let choice = AnsiConsole.Prompt(selectionPrompt)
+    AnsiConsole.MarkupLineInterpolated($"[grey]{title}[/] [blue]{choice}[/]")
+    choice
+
+let displayPrompt () =
+    Console.Title <- "TMP"
 
     AnsiConsole.Background <- Color.DarkBlue
     AnsiConsole.Foreground <- Color.White
     AnsiConsole.Clear()
-    AnsiConsole.Write(FigletText(SpectreConsole.FigletFont.AnsiShadow, "TMP"))
+    let figletText = FigletText(SpectreConsole.FigletFont.Lean, "TMP")
+    figletText.Color <- Color.Yellow
+    figletText.Justification <- Justify.Center
+    let panel = new Panel(figletText)
+    panel.BorderStyle <- Style.Parse("grey")
 
-    AnsiConsole.markupLineInterpolated $"Working directory: [bold]{location}[/]"
-    let project = AnsiConsole.Ask<string>("What are you working on today?")
+    AnsiConsole.Write(panel)
 
-    let selectionPrompt = SelectionPrompt()
-    selectionPrompt.Title <- "Create a new .NET project?"
+    let subject = AnsiConsole.Ask<string>("What are you working on today?")
 
-    selectionPrompt.AddChoices(
-        [
+    let createDotnetProject =
+        select "Create a new .NET project ?" [
             CreateDotnetProject.No
-            (CreateDotnetProject.Yes "fsharp")
-            (CreateDotnetProject.Yes "csharp")
+            (CreateDotnetProject.Yes FSharp)
+            (CreateDotnetProject.Yes CSharp)
         ]
-    )
-    |> ignore
 
-    let createDotnetProject = AnsiConsole.Prompt(selectionPrompt)
+    let location =
+        select "Where do you want to create your notes ?" [
+            Location.Default
+            Location.Personal
+        ]
 
-    (project, createDotnetProject)
+    let editor =
+        select "Which editor do you want to use ?" [
+            Editor.VisualStudioCode
+            Editor.Cursor
+        ]
+
+    {
+        Subject = subject
+        CreateDotnetProject = createDotnetProject
+        Location = location
+        Editor = editor
+    }
 
 [<EntryPoint>]
-let main args =
-    let location =
-        match args with
-        | [| x |] -> Location.fromString x
-        | _ -> Default
+let main _ =
+
+    let promptResult = displayPrompt ()
 
     let locationSource =
-        match location with
+        match promptResult.Location with
         | Default -> preferredDefaultLocations
         | Personal -> preferredPersonalLocations
 
@@ -86,10 +120,12 @@ let main args =
         |> Option.defaultWith (fun _ -> failwith $"Could not find preferred location %A{locationSource}")
         |> _.FullName
 
-    let name, createDotnetProject = displayPrompt location
-    let thisMonth = DateTime.Now.ToString("yyyy-MM")
-    let today = DateTime.Now.ToString("yyyy-MM-dd")
-    let fixedName = name |> Regex.replace @"[^\w\d]" "-" |> Regex.replace "-+" "-"
+    let thisMonth = DateTimeOffset.Now.ToString("yyyy-MM")
+    let today = DateTimeOffset.Now.ToString("yyyy-MM-dd")
+
+    let fixedName =
+        promptResult.Subject |> Regex.replace @"[^\w\d]" "-" |> Regex.replace "-+" "-"
+
     let newFolderName = $"{today}--{fixedName}"
 
     // Create month folder if it doesn't exist
@@ -105,7 +141,7 @@ let main args =
     let notesFilePath = newTmpFolder </> notesFileName
 
     [
-        $"# {name}"
+        $"# {promptResult.Subject}"
         ""
         $"Date: _{today}_"
         ""
@@ -116,7 +152,7 @@ let main args =
     let workspaceContents =
         {|
             folders = [ {| path = "." |} ]
-            settings = {| ``window.title`` = name |}
+            settings = {| ``window.title`` = promptResult.Subject |}
         |}
         |> (fun x -> JsonConvert.SerializeObject(x, Formatting.Indented))
 
@@ -125,9 +161,14 @@ let main args =
     File.writeAllText workspaceFile workspaceContents
     File.hide workspaceFile
 
+    let editorExecutable =
+        match promptResult.Editor with
+        | VisualStudioCode -> "c.exe"
+        | Cursor -> "csr.exe"
+
     let startInfo =
         ProcessStartInfo(
-            "c.exe",
+            editorExecutable,
             [
                 "open"
                 "--file"
@@ -145,9 +186,9 @@ let main args =
     let _process = Process.Start(startInfo)
     let _exited = _process.WaitForExit(TimeSpan.FromSeconds(5.))
 
-    match createDotnetProject with
+    match promptResult.CreateDotnetProject with
     | CreateDotnetProject.No -> ()
-    | CreateDotnetProject.Yes ``type`` ->
+    | CreateDotnetProject.Yes projectLanguage ->
 
         Rule() |> Rule.withTitle "Create a new .NET project" |> AnsiConsole.write
 
@@ -160,7 +201,7 @@ let main args =
                 "InitProject.exe",
                 [
                     "--lang"
-                    ``type``
+                    projectLanguage.asString
                 ]
             )
 
