@@ -28,5 +28,4 @@ module FigletFont =
 
         FigletFont.Parse(FontsSources.AnsiShadow)
 
-    let Lean =
-        FigletFont.Parse(FontsSources.Lean)
+    let Lean = FigletFont.Parse(FontsSources.Lean)
