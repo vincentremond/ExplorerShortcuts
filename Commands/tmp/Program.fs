@@ -93,8 +93,8 @@ let displayPrompt () =
 
     let editor =
         select "Which editor do you want to use ?" [
-            Editor.VisualStudioCode
             Editor.Cursor
+            Editor.VisualStudioCode
         ]
 
     {
