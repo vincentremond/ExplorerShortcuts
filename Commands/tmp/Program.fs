@@ -39,7 +39,7 @@ type PromptResult = {
 }
 
 let userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
-let preferredPersonalLocations = [ "Perso" </> "tmp" ]
+let preferredPersonalLocations = [ userProfile </> "Perso" </> "tmp" ]
 
 let preferredDefaultLocations =
 
