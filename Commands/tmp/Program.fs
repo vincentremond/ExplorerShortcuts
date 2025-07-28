@@ -9,12 +9,11 @@ open Pinicola.FSharp
 open Pinicola.FSharp.SpectreConsole
 open Spectre.Console
 
-[<RequireQualifiedAccess>]
-type CreateDotnetProject =
+type Maybe<'a> =
+    | Yes of 'a
     | No
-    | Yes of DotnetProjectLanguage
 
-and DotnetProjectLanguage =
+type DotnetProjectLanguage =
     | FSharp
     | CSharp
 
@@ -33,7 +32,7 @@ type Editor =
 
 type PromptResult = {
     Subject: string
-    CreateDotnetProject: CreateDotnetProject
+    CreateDotnetProject: Maybe<DotnetProjectLanguage * bool>
     Location: Location
     Editor: Editor
 }
@@ -71,7 +70,7 @@ let displayPrompt () =
     let figletText = FigletText(SpectreConsole.FigletFont.Lean, "TMP")
     figletText.Color <- Color.Yellow
     figletText.Justification <- Justify.Center
-    let panel = new Panel(figletText)
+    let panel = Panel(figletText)
     panel.BorderStyle <- Style.Parse("grey")
 
     AnsiConsole.Write(panel)
@@ -80,10 +79,22 @@ let displayPrompt () =
 
     let createDotnetProject =
         select "Create a new .NET project ?" [
-            CreateDotnetProject.No
-            (CreateDotnetProject.Yes FSharp)
-            (CreateDotnetProject.Yes CSharp)
+            No
+            (Yes FSharp)
+            (Yes CSharp)
         ]
+
+    let createDotnetProject =
+        match createDotnetProject with
+        | No -> No
+        | Yes lang ->
+            let withUnitTests =
+                select "With unit tests ?" [
+                    false
+                    true
+                ]
+
+            Yes(lang, withUnitTests)
 
     let location =
         select "Where do you want to create your notes ?" [
@@ -187,8 +198,8 @@ let main _ =
     let _exited = _process.WaitForExit(TimeSpan.FromSeconds(5.))
 
     match promptResult.CreateDotnetProject with
-    | CreateDotnetProject.No -> ()
-    | CreateDotnetProject.Yes projectLanguage ->
+    | No -> ()
+    | Yes(projectLanguage, withUnitTests) ->
 
         Rule() |> Rule.withTitle "Create a new .NET project" |> AnsiConsole.write
 
@@ -200,6 +211,8 @@ let main _ =
             ProcessStartInfo(
                 "InitProject.exe",
                 [
+                    if not withUnitTests then
+                        "--no-test-project"
                     "--lang"
                     projectLanguage.asString
                 ]
