@@ -14,4 +14,4 @@ let main _ =
         ]
         |> List.map (fun x -> x </> @"Microsoft VS Code\Code.exe")
 
-    Library.main "c" "Visual Studio Code" possiblePaths
+    VsCodeBasedEditorOpener.main "c" "Visual Studio Code" possiblePaths

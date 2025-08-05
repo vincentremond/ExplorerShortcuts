@@ -1,4 +1,4 @@
-﻿module Library
+﻿module VsCodeBasedEditorOpener
 
 open System
 open System.IO

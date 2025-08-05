@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
-    <Compile Include="Library.fs" />
+    <Compile Include="VsCodeBasedEditorOpener.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ExplorerShortcuts.Common\ExplorerShortcuts.Common.fsproj" />

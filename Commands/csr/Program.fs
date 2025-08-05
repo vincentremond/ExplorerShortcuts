@@ -14,4 +14,4 @@ let main _ =
         ]
         |> List.map (fun x -> x </> @"cursor\cursor.exe")
 
-    Library.main "csr" "Cursor" possiblePaths
+    VsCodeBasedEditorOpener.main "csr" "Cursor" possiblePaths
