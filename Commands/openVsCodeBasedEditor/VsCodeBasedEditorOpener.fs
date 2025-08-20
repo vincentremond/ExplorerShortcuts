@@ -14,7 +14,7 @@ type CliOptions =
     | OpenCurrentDirectory
 
 type CommandLineOptions =
-    | OpenFile of FileName: string * Line: int32 * Column: int32 option
+    | OpenFile of FileName: string * Line: int32 * Column: int32 option * Directory: string option
     | OpenCurrentDirectory
 
 let commandLineParser editorName =
@@ -33,14 +33,16 @@ let commandLineParser editorName =
             let! line =
                 opt "line" "l" "line" "The line number to open the file at"
                 |> optParse tryParseInt
-                |> reqOpt
+                |> defaultValue 0
 
             let! column =
                 opt "column" "c" "column" "The column number to open the file at"
                 |> optParse tryParseInt
 
+            let! directory = opt "directory" "d" "directory" "The directory to open the file in"
+
             let! file = opt "file" "f" "file" "The file to open" |> reqOpt
-            return OpenFile(file, line, column)
+            return OpenFile(file, line, column, directory)
         | CliOptions.OpenCurrentDirectory -> return OpenCurrentDirectory
 
     }
@@ -61,9 +63,12 @@ let main shortCutName editorName possiblePaths =
                 AnsiConsole.markupLineInterpolated $"Opening {editorName} at [bold]{editorExePath}[/]"
 
                 match options with
-                | OpenFile(fileName, line, column) ->
+                | OpenFile(fileName, line, column, directory) ->
 
-                    let directory = Path.GetDirectoryName(fileName)
+                    let directory =
+                        match directory with
+                        | Some directory -> directory
+                        | None -> Path.GetDirectoryName(fileName)
 
                     let gotoArgValue =
                         match column with
