@@ -6,6 +6,7 @@ open System.IO
 open ExplorerShortcuts.Common
 open Newtonsoft.Json
 open Pinicola.FSharp
+open Pinicola.FSharp.RegularExpressions
 open Pinicola.FSharp.SpectreConsole
 open Spectre.Console
 
@@ -134,8 +135,20 @@ let main _ =
     let thisMonth = DateTimeOffset.Now.ToString("yyyy-MM")
     let today = DateTimeOffset.Now.ToString("yyyy-MM-dd")
 
+    let invalidPathChars = Path.GetInvalidFileNameChars() |> Set.ofArray
+
     let fixedName =
-        promptResult.Subject |> Regex.replace @"[^\w\d]" "-" |> Regex.replace "-+" "-"
+        promptResult.Subject
+        |> String.removeDiacritics
+        |> Seq.map (fun c ->
+            if Set.contains c invalidPathChars then '-'
+            elif Char.IsWhiteSpace c then '-'
+            else c
+        )
+        |> String.ofSeq
+        |> Regex.replace "[\-]{2,}" "-"
+        |> Regex.replace "^\-+" ""
+        |> Regex.replace "\-$" ""
 
     let newFolderName = $"{today}--{fixedName}"
 
