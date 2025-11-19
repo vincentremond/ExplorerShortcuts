@@ -55,24 +55,10 @@ module VersionParser =
         | Success(result, _, _) -> Result.Ok result
         | Failure(msg, _, _) -> Result.Error msg)
 
-[<EntryPoint>]
-let main args =
+[<RequireQualifiedAccess>]
+module RiderLocator =
 
-    let verbose =
-        match args with
-        | [| _; "--verbose" |] -> true
-        | _ -> false
-
-    let getProductVersion (path: string) =
-        let versionInfo = FileVersionInfo.GetVersionInfo path
-        versionInfo.ProductVersion
-
-    let parseProductVersion (version: string) =
-        match VersionParser.parse version with
-        | Ok(major, minor, build, fix) -> (major, minor, build)
-        | Error _ -> failwithf $"Failed to parse version: %s{version}"
-
-    let possibleLocations = [
+    let getPossibleLocations () = [
         (Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
          </> "JetBrains",
          "JetBrains Rider *")
@@ -84,14 +70,23 @@ let main args =
          "Rider")
     ]
 
-    let installFolders =
+    let getProductVersion (path: string) =
+        let versionInfo = FileVersionInfo.GetVersionInfo path
+        versionInfo.ProductVersion
+
+    let parseProductVersion (version: string) =
+        match VersionParser.parse version with
+        | Ok(major, minor, build, fix) -> (major, minor, build)
+        | Error _ -> failwithf $"Failed to parse version: %s{version}"
+
+    let getInstallFolders possibleLocations =
         possibleLocations
         |> List.collect (fun (path, installDirectoryPattern) ->
             match Directory.tryPath path with
             | None -> []
             | Some directory ->
                 directory.GetDirectories(installDirectoryPattern)
-                |> Seq.map (fun dir -> dir.FullName)
+                |> Seq.map _.FullName
                 |> Seq.toList
         )
         |> List.map (fun installPath -> installPath </> "bin" </> "rider64.exe")
@@ -100,16 +95,32 @@ let main args =
         |> List.sortByDescending snd
         |> List.toArray
 
-    let currentDirectory = Environment.CurrentDirectory
+    let getRiderPath () =
 
-    let solutionFiles =
+        let possibleLocations = getPossibleLocations ()
+        let installFolders = getInstallFolders possibleLocations
+
+        match installFolders with
+        | [||] -> failwithf $"No JetBrains Rider installation found in %A{possibleLocations}"
+        | [| x |] -> x
+        | _ ->
+            AnsiConsole.Prompt(
+                SelectionPrompt<string * (int * int * int)>()
+                |> SelectionPrompt.setTitle "Version ?"
+                |> SelectionPrompt.pageSize 10
+                |> SelectionPrompt.addChoices installFolders
+            )
+
+[<RequireQualifiedAccess>]
+module SolutionLocator =
+    let get dir =
         [|
             "*.sln"
             "*.slnx"
         |]
-        |> Array.collect (fun ext -> Directory.getAllFiles ext currentDirectory)
+        |> Array.collect (fun ext -> Directory.getAllFiles ext dir)
         |> Array.filter (fun file ->
-            let relativePath = Path.relativePath currentDirectory file
+            let relativePath = Path.relativePath dir file
 
             let isPinicolaSubModulePath = relativePath |> String.startsWith "Pinicola.FSharp"
 
@@ -117,28 +128,14 @@ let main args =
 
         )
 
+[<EntryPoint>]
+let main args =
+
+    let currentDirectory = Environment.CurrentDirectory
+
+    let solutionFiles = SolutionLocator.get currentDirectory
+
     let logo = FSharp.Data.LiteralProviders.TextFile.``logo.txt``.Text
-
-    AnsiConsole.WriteLine(logo)
-
-    let (path, (major, minor, build)) =
-        match installFolders with
-        | [||] ->
-            failwithf
-                "No JetBrains Rider installation found in %A"
-                (possibleLocations |> List.map (fun (a, b) -> $"{a}\\{b}"))
-        | [| x |] -> x
-        | _ ->
-            AnsiConsole.Prompt(
-                SelectionPrompt<string * (int * int * int)>()
-                |> SelectionPrompt.setTitle "Version ?"
-                |> SelectionPrompt.pageSize (10)
-                |> SelectionPrompt.addChoices installFolders
-            )
-
-    AnsiConsole.MarkupLineInterpolated(
-        $"Using JetBrains Rider [blue]{major}.{minor}.{build}[/] located in : '[bold]{path}[/]'"
-    )
 
     let target =
         match solutionFiles with
@@ -158,6 +155,10 @@ let main args =
                 |> SelectionPrompt.addChoices solutionFiles
             )
 
+    AnsiConsole.WriteLine(logo)
+    let (path, (major, minor, build)) = RiderLocator.getRiderPath ()
+
+    AnsiConsole.MarkupLineInterpolated($"Using JetBrains Rider [blue]{major}.{minor}.{build}[/] located in : '[bold]{path}[/]'")
     AnsiConsole.MarkupLineInterpolated($"Opening : '[bold]{target}[/]'")
 
     let psi =
