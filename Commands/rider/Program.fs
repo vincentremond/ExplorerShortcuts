@@ -131,29 +131,33 @@ module SolutionLocator =
 [<EntryPoint>]
 let main args =
 
-    let currentDirectory = Environment.CurrentDirectory
-
-    let solutionFiles = SolutionLocator.get currentDirectory
-
     let logo = FSharp.Data.LiteralProviders.TextFile.``logo.txt``.Text
 
     let target =
-        match solutionFiles with
+
+        match args with
+        | [| solutionFile |] -> solutionFile
         | [||] ->
-            AnsiConsole.MarkupLineInterpolated($"No solution files found in the current directory.")
+            let currentDirectory = Environment.CurrentDirectory
+            let solutionFiles = SolutionLocator.get currentDirectory
 
-            match AnsiConsole.Confirm("Do you want to open the current directory in Rider ?") with
-            | true -> Environment.CurrentDirectory
-            | false -> failwith "No solution files found and user did not confirm to open the current directory."
+            match solutionFiles with
+            | [||] ->
+                AnsiConsole.MarkupLineInterpolated($"No solution files found in the current directory.")
 
-        | [| x |] -> x
-        | _ ->
-            AnsiConsole.Prompt(
-                SelectionPrompt<string>()
-                |> SelectionPrompt.setTitle "Solution ?"
-                |> SelectionPrompt.pageSize (10)
-                |> SelectionPrompt.addChoices solutionFiles
-            )
+                match AnsiConsole.Confirm("Do you want to open the current directory in Rider ?") with
+                | true -> Environment.CurrentDirectory
+                | false -> failwith "No solution files found and user did not confirm to open the current directory."
+
+            | [| x |] -> x
+            | _ ->
+                AnsiConsole.Prompt(
+                    SelectionPrompt<string>()
+                    |> SelectionPrompt.setTitle "Solution ?"
+                    |> SelectionPrompt.pageSize (10)
+                    |> SelectionPrompt.addChoices solutionFiles
+                )
+        | _ -> failwithf $"Unsupported args {args}"
 
     AnsiConsole.WriteLine(logo)
     let (path, (major, minor, build)) = RiderLocator.getRiderPath ()
