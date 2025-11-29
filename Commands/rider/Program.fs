@@ -162,7 +162,10 @@ let main args =
     AnsiConsole.WriteLine(logo)
     let (path, (major, minor, build)) = RiderLocator.getRiderPath ()
 
-    AnsiConsole.MarkupLineInterpolated($"Using JetBrains Rider [blue]{major}.{minor}.{build}[/] located in : '[bold]{path}[/]'")
+    AnsiConsole.MarkupLineInterpolated(
+        $"Using JetBrains Rider [blue]{major}.{minor}.{build}[/] located in : '[bold]{path}[/]'"
+    )
+
     AnsiConsole.MarkupLineInterpolated($"Opening : '[bold]{target}[/]'")
 
     let psi =

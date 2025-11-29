@@ -29,7 +29,8 @@ let commandLineParser editorName =
     fargo {
         match!
             (cmd "open" "o" $"Open a file in {editorName}" |>> CliOptions.OpenFile)
-            <|> (cmd "opendir" null $"Open a directory in {editorName}" |>> CliOptions.OpenDirectory)
+            <|> (cmd "opendir" null $"Open a directory in {editorName}"
+                 |>> CliOptions.OpenDirectory)
             <|> (ret CliOptions.OpenCurrentDirectory)
         with
         | CliOptions.OpenFile ->
@@ -115,7 +116,10 @@ let main shortCutName editorName possiblePaths =
             with e ->
                 MessageBox.show "error" (e.ToString())
 
-                File.WriteAllText($"explorershortcuts.{shortCutName}.error.{DateTimeOffset.Now:yyyyMMddHHmmssfff}.txt", e.ToString())
+                File.WriteAllText(
+                    $"explorershortcuts.{shortCutName}.error.{DateTimeOffset.Now:yyyyMMddHHmmssfff}.txt",
+                    e.ToString()
+                )
 
                 reraise ()
         )
