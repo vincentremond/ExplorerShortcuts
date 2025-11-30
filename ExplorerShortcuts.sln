@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{7AAD52
 		paket.lock = paket.lock
 		README.md = README.md
 		New-Shortcut.ps1 = New-Shortcut.ps1
-		build.cmd = build.cmd
+		build.ps1 = build.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commands", "Commands", "{F7F3E545-962E-B71C-0134-BA35F7A27A96}"

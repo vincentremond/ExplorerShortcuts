@@ -146,9 +146,9 @@ let main _ =
             else c
         )
         |> String.ofSeq
-        |> Regex.replace "[\-]{2,}" "-"
-        |> Regex.replace "^\-+" ""
-        |> Regex.replace "\-$" ""
+        |> Regex.replacePattern "[\-]{2,}" "-"
+        |> Regex.replacePattern "^\-+" ""
+        |> Regex.replacePattern "\-$" ""
 
     let newFolderName = $"{today}--{fixedName}"
 
