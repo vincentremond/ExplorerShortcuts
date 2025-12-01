@@ -222,7 +222,7 @@ let main _ =
 
         let dotnetStartInfo =
             ProcessStartInfo(
-                "InitProject.exe",
+                "InitProject",
                 [
                     if not withUnitTests then
                         "--no-test-project"
