@@ -1,31 +1,49 @@
 open System
 open ExplorerShortcuts.Common
+open Fargo
 open Pinicola.FSharp.SpectreConsole
 open Pinicola.FSharp.IO
+open Pinicola.FSharp.Fargo
 
-let startDirectory = StartDirectory.CurrentDirectory
+let cliParser =
+    fargo {
+        let! verbose = flag "verbose" "v" "Verbose output"
+        return {| Verbose = verbose |}
+    }
 
-AnsiConsole.markupLineInterpolated $"Starting Fork from [bold]{startDirectory.Value}[/]"
+FargoCmdLine.run
+    "fork"
+    cliParser
+    (fun args ->
 
-let appDataDirectory =
-    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+        let startDirectory = StartDirectory.CurrentDirectory
 
-AnsiConsole.markupLineInterpolated $"AppData directory is [bold]{appDataDirectory}[/]"
+        if args.Verbose then
+            AnsiConsole.markupLineInterpolated $"Starting Fork from [bold]{startDirectory.Value}[/]"
 
-let possibleLocations = [
-    appDataDirectory </> "Fork" </> "current"
-    appDataDirectory </> "Fork"
-]
+        let appDataDirectory =
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
 
-let location = possibleLocations |> Path.tryFindFileInLocations "Fork.exe"
+        if args.Verbose then
+            AnsiConsole.markupLineInterpolated $"AppData directory is [bold]{appDataDirectory}[/]"
 
-let forkPath =
-    match location with
-    | Some path -> path
-    | None -> failwith $"Fork.exe not found in {possibleLocations}"
+        let possibleLocations = [
+            appDataDirectory </> "Fork" </> "current"
+            appDataDirectory </> "Fork"
+        ]
 
-AnsiConsole.markup "Starting Fork... "
+        let location = possibleLocations |> Path.tryFindFileInLocations "Fork.exe"
 
-Process.startAndForget startDirectory (Executable forkPath) [| startDirectory.Value |]
+        let forkPath =
+            match location with
+            | Some path -> path
+            | None -> failwith $"Fork.exe not found in {possibleLocations}"
 
-AnsiConsole.markupLine " [green]✔[/] done."
+        if args.Verbose then
+            AnsiConsole.markup "Starting Fork... "
+
+        Process.startAndForget startDirectory (Executable forkPath) [| startDirectory.Value |]
+
+        if args.Verbose then
+            AnsiConsole.markupLine " [green]✔[/] done."
+    )
