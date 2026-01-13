@@ -220,9 +220,11 @@ let main _ =
 
         Directory.CreateDirectory(targetFolder) |> ignore
 
+        let initProject = Where.findInPath "InitProject"
+
         let dotnetStartInfo =
             ProcessStartInfo(
-                "InitProject",
+                initProject.FullName,
                 [
                     if not withUnitTests then
                         "--no-test-project"
