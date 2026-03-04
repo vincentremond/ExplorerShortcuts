@@ -1,5 +1,6 @@
 open System
 open System.Diagnostics
+open System.Reflection
 open ExplorerShortcuts.Common
 open ExplorerShortcuts.Common.SpectreConsole
 open Spectre.Console
@@ -113,7 +114,7 @@ module RiderLocator =
 
 [<RequireQualifiedAccess>]
 module SolutionLocator =
-    let get dir =
+    let getForDirectory dir =
         [|
             "*.sln"
             "*.slnx"
@@ -128,18 +129,12 @@ module SolutionLocator =
 
         )
 
-[<EntryPoint>]
-let main args =
-
-    let logo = FSharp.Data.LiteralProviders.TextFile.``logo.txt``.Text
-
-    let target =
-
+    let getSolutionPath args =
         match args with
         | [| solutionFile |] -> solutionFile
         | [||] ->
             let currentDirectory = Environment.CurrentDirectory
-            let solutionFiles = SolutionLocator.get currentDirectory
+            let solutionFiles = getForDirectory currentDirectory
 
             match solutionFiles with
             | [||] ->
@@ -159,8 +154,16 @@ let main args =
                 )
         | _ -> failwithf $"Unsupported args {args}"
 
-    AnsiConsole.WriteLine(logo)
-    let (path, (major, minor, build)) = RiderLocator.getRiderPath ()
+[<EntryPoint>]
+let main args =
+
+    let logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("rider.jetbrains-16-16.png")
+    let image = CanvasImage(logoStream)
+    AnsiConsole.Write(image)
+
+    let target = SolutionLocator.getSolutionPath args
+
+    let path, (major, minor, build) = RiderLocator.getRiderPath ()
 
     AnsiConsole.MarkupLineInterpolated(
         $"Using JetBrains Rider [blue]{major}.{minor}.{build}[/] located in : '[bold]{path}[/]'"

@@ -8,6 +8,7 @@ nuget FSharp.Data.LiteralProviders
 nuget LibGit2Sharp
 nuget Newtonsoft.Json
 nuget Spectre.Console
+nuget Spectre.Console.ImageSharp
 nuget Vanara.PInvoke.User32
 
 # Tests
