@@ -105,8 +105,8 @@ let displayPrompt () =
 
     let editor =
         select "Which editor do you want to use ?" [
-            Editor.Cursor
             Editor.VisualStudioCode
+            Editor.Cursor
         ]
 
     {
