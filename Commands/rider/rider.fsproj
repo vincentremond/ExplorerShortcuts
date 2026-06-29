@@ -11,10 +11,6 @@
     <None Include="paket.references" />
     <Compile Include="Program.fs" />
     <None Include="rider.ico" />
-    <Content Include="jetbrains-16-16.svg" />
-    <EmbeddedResource Include="jetbrains-16-16.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ExplorerShortcuts.Common\ExplorerShortcuts.Common.fsproj" />

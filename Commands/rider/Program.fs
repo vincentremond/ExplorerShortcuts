@@ -157,12 +157,6 @@ module SolutionLocator =
 [<EntryPoint>]
 let main args =
 
-    let logoStream =
-        Assembly.GetExecutingAssembly().GetManifestResourceStream("rider.jetbrains-16-16.png")
-
-    let image = CanvasImage(logoStream)
-    AnsiConsole.Write(image)
-
     let target = SolutionLocator.getSolutionPath args
 
     let path, (major, minor, build) = RiderLocator.getRiderPath ()
