@@ -17,7 +17,7 @@ NUGET
     coverlet.collector (10.0.1)
     FParsec (1.1.1)
       FSharp.Core (>= 4.3.4)
-    FSharp.Core (10.1.301)
+    FSharp.Core (11.0.100)
     FSharp.Data.LiteralProviders (1.0.3)
       FSharp.Core (>= 4.5)
     FsUnit (7.1.1)
