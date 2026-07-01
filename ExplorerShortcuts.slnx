@@ -1,0 +1,41 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/.build/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="build.ps1" />
+    <File Path="New-Shortcut.ps1" />
+    <File Path="paket.dependencies" />
+    <File Path="paket.lock" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Commands/">
+    <Project Path="Commands/a/a.fsproj" />
+    <Project Path="Commands/c/c.fsproj" />
+    <Project Path="Commands/csr/csr.fsproj" />
+    <Project Path="Commands/e/e.fsproj" />
+    <Project Path="Commands/fork/fork.fsproj" />
+    <Project Path="Commands/openVsCodeBasedEditor/openVsCodeBasedEditor.fsproj" />
+    <Project Path="Commands/repo/repo.fsproj" />
+    <Project Path="Commands/rider.Tests/rider.Tests.fsproj" />
+    <Project Path="Commands/rider/rider.fsproj" />
+    <Project Path="Commands/svg2dxf/svg2dxf.fsproj" />
+    <Project Path="Commands/svg2ico/svg2ico.fsproj" />
+    <Project Path="Commands/svg2pdf/svg2pdf.fsproj" />
+    <Project Path="Commands/svg2png/svg2png.fsproj" />
+    <Project Path="Commands/svg2xxx/svg2xxx.fsproj" />
+    <Project Path="Commands/tmp/tmp.fsproj" />
+    <Project Path="Commands/vs/vs.fsproj" />
+  </Folder>
+  <Folder Name="/Pinicola.FSharp/">
+    <Project Path="Pinicola.FSharp/Pinicola.FSharp.SpectreConsole/Pinicola.FSharp.SpectreConsole.fsproj" />
+    <Project Path="Pinicola.FSharp/Pinicola.FSharp/Pinicola.FSharp.fsproj" />
+  </Folder>
+  <Project Path="BuildIcons/BuildIcons.fsproj" />
+  <Project Path="ExplorerShortcuts.Common/ExplorerShortcuts.Common.fsproj" />
+  <Project Path="ExplorerShortcuts/ExplorerShortcuts.fsproj" />
+</Solution>

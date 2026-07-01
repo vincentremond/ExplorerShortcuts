@@ -1,4 +1,4 @@
-﻿open System.Diagnostics
+open System.Diagnostics
 open System.IO
 open System.Xml.Linq
 
@@ -127,6 +127,7 @@ type IconSet =
     | Brand
 
 let icons = [
+    Solid, '\uf135', +0, +0, "a"
     Solid, '\uf121', +0, +0, "c"
     Solid, '\uf246', +0, +0, "csr"
     Solid, '\uf07c', +0, +0, "e"

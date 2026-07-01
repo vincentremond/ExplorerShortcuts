@@ -30,6 +30,7 @@ type Location =
 type Editor =
     | VisualStudioCode
     | Cursor
+    | AntigravityIDE
 
 type PromptResult = {
     Subject: string
@@ -107,6 +108,7 @@ let displayPrompt () =
         select "Which editor do you want to use ?" [
             Editor.VisualStudioCode
             Editor.Cursor
+            Editor.AntigravityIDE
         ]
 
     {
@@ -189,6 +191,7 @@ let main _ =
         match promptResult.Editor with
         | VisualStudioCode -> "c.exe"
         | Cursor -> "csr.exe"
+        | AntigravityIDE -> "a.exe"
 
     let startInfo =
         ProcessStartInfo(
