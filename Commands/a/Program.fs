@@ -12,12 +12,10 @@ let main _ =
             (Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
              </> @"Programs")
         ]
-        |> List.collect (fun x ->
-            [
-                x </> @"Antigravity IDE\Antigravity IDE.exe"
-                x </> @"Antigravity\Antigravity.exe"
-                x </> @"Antigravity\Antigravity IDE.exe"
-            ]
-        )
+        |> List.collect (fun x -> [
+            x </> @"Antigravity IDE\Antigravity IDE.exe"
+            x </> @"Antigravity\Antigravity.exe"
+            x </> @"Antigravity\Antigravity IDE.exe"
+        ])
 
     VsCodeBasedEditorOpener.main "a" "Antigravity IDE" possiblePaths
